@@ -375,5 +375,47 @@ ois_clean <- ois_clean %>%
 # write_csv(ois_clean, here('output', "ois_clean.csv"))
 
 
+# BBG price data ----------------------------------------------------------
+
+
+bbg_price_data <- read_excel(here('input', 'bbg_gilt_data.xlsx'),
+                             sheet = "data_prices (values)")
+
+bbg_hr_dataset <- readRDS(here('output','bbg_hr_dataset.RDS'))
+
+
+# work out for loop i 
+
+#split by ISIN names 
+#loop to split up data by bond
+bbg_price_list <- list()
+
+for(i in seq(2,238,2)) {
+  
+  #select data
+  df <- bbg_price_data %>%
+    select(1, i:(i + 2))
+  
+  #pull ISIN 
+  name <- df[3,2] %>% 
+    str_replace(" Corp", "")
+  
+  #rename and remove rows
+  df <- df %>% 
+    set_names(df[5,]) %>% 
+    slice(-c(1:5))
+  
+  #reformat
+  df <- df %>% 
+    mutate(Dates = as.Date(as.numeric(Dates), origin = "1899-12-30", tz = "GMT"),
+           across(c(PX_MID:PX_BID),as.numeric),
+           ISIN = name)
+  
+  bbg_price_list[[i]] <- df
+  
+}
+
+bbg_price_list_long <- bind_rows(bbg_gilt_list)
+
 
 

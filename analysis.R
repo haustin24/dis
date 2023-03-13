@@ -767,11 +767,7 @@ saveRDS(bbg_hr_dataset, here('output', 'bbg_hr_dataset.RDS'))
 
 # -------------------------------------------------------------------------
 
+
 #get amount outstanding from DMO
 dmo_issuance <- bind_rows(readRDS(here('output','clean_dmo_issuance.RDS')))
-
-
-
-
-
 
