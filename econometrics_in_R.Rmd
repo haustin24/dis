@@ -1,0 +1,178 @@
+---
+title: "Econometrics in R"
+output: html_document
+date: "2022-10-20"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(AER)
+
+```
+
+## Linear regression
+
+```{r school_data}
+# compute STR and append it to CASchools
+CASchools$STR <- CASchools$students/CASchools$teachers 
+
+# compute TestScore and append it to CASchools
+CASchools$score <- (CASchools$read + CASchools$math)/2 
+
+# compute sample averages of STR and score
+avg_STR <- mean(CASchools$STR) 
+avg_score <- mean(CASchools$score)
+
+# compute sample standard deviations of STR and score
+sd_STR <- sd(CASchools$STR) 
+sd_score <- sd(CASchools$score)
+
+# set up a vector of percentiles and compute the quantiles 
+quantiles <- c(0.10, 0.25, 0.4, 0.5, 0.6, 0.75, 0.9)
+quant_STR <- quantile(CASchools$STR, quantiles)
+quant_score <- quantile(CASchools$score, quantiles)
+
+DistributionSummary <- data.frame(Average = c(avg_STR, avg_score), 
+                                  StandardDeviation = c(sd_STR, sd_score), 
+                                  quantile = rbind(quant_STR, quant_score))
+
+
+```
+
+Correlation between two numeric #negative but weak correlation
+
+```{r plot}
+
+cor(CASchools$STR, CASchools$score)
+
+plot(score ~ STR, 
+     data = CASchools,
+     main = "Scatterplot of TestScore and STR", 
+     xlab = "STR (X)",
+     ylab = "Test Score (Y)")
+```
+
+## OLS
+
+Chooses the regression coefficient such that the estimated regression line is as 'close'as possible to the observed data points.
+
+$$
+  \sum_{i = 1}^{n}{(Y_i - b_0 - b_1X_i)^2}
+$$
+
+Estimators of slope (hat = mean) $$  
+\hat{\beta}_1 = \frac{\sum_{i = 1}^{n}(X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i = 1}^{n}(X_i - \bar{X})^2}
+$$
+
+Estimator of intercept
+
+$$
+\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1\bar{X}
+$$
+
+OLS predicted values Y-hat and residuals U-hat are
+
+$$
+\hat{Y_i} = \hat{\beta_0} + \hat{\beta_1}X_i
+$$ $$
+\hat{u_i} = Y_i - \hat{Y_i}
+$$
+
+Slope parameter and intercept
+
+```{r}
+attach(CASchools)
+
+
+beta_1 <- sum((STR - mean(STR))*(score - mean(score)))/sum((STR - mean(STR))^2)
+
+beta_0 <- mean(score)-(beta_1*mean(STR))
+
+beta_1
+beta_0 
+
+```
+
+Using linear model function lm()
+
+```{r}
+linear_model <- lm(score ~ STR, data = CASchools)
+
+linear_model
+```
+
+```{r}
+
+  # plot the data
+plot(score ~ STR, 
+     data = CASchools,
+     main = "Scatterplot of TestScore and STR", 
+     xlab = "STR (X)",
+     ylab = "Test Score (Y)",
+     xlim = c(10, 30),
+     ylim = c(600, 720))
+
+# add the regression line
+abline(linear_model)
+```
+
+## Measure of fit
+
+Observing how tightly observed the observations are around regression line
+
+### Coefficient of Determination
+
+$$
+R^2
+$$ The fraction of the sample variance Yi that is explained by Xi. Therefore a ratio of the explained sum of squares (ESS) to the total sum of squares (TSS).
+
+ESS = sum of standard deviations of the predicted values Y-hat-i, from the average Yi
+
+TSS = sum of squared deviations of the Yi from their average
+
+$$
+ESS = \sum_{i = 1}^{n}(\hat{Y_i} - \bar{Y})^2
+$$ $$
+TSS = \sum_{i = 1}^{n}(Y_i - \bar{Y})^2
+$$
+
+$$
+R^2 = \frac{ESS}{TSS} = 1 - \frac{SSR}{TSS}
+$$ $$
+SSR = \sum_{i = 1}^{n}\hat{u}^2
+$$
+
+Perfect fit implies R\^2 = 1 since SRR = 0.
+
+### Standard Error of Regression
+
+An estimator of the standard deviation of residuals (measures the typical deviation from the regression line i.e. magnitude of typical residuals)
+
+$$
+SER = s_\hat{u} = \sqrt{s^2_\hat{u}} where s^2+u = \frac{1}{n-2}\sum_{i = 1}^{n}\hat{u}^2_i = \frac{SSR}{n - 2} 
+$$
+
+```{r stats}
+mod_summary <- summary(linear_model)
+
+mod_summary
+```
+
+5.1% of variance of the dependent variable (score) is explained by explanatory variable (STR). Little explained.
+
+SER = Residual standard error (18.58) "on average the deviation of the actual achieved test score to the regression line is 18.58 point"
+
+```{r manual}
+SSR <- sum(mod_summary$residuals^2)
+TSS <- sum((score-mean(score))^2)
+R2 <- 1 - SSR/TSS
+
+R2
+
+n <- nrow(CASchools)
+SER <- sqrt(SSR/(n-2))
+
+SER
+
+```
