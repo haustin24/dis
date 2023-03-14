@@ -374,6 +374,362 @@ ois_clean <- ois_clean %>%
 # saveRDS(ois_clean, here('output', "ois_clean.RDS"))
 # write_csv(ois_clean, here('output', "ois_clean.csv"))
 
+#BOE dataset: bid-ask spreads and yields ------------------------------------
+
+bid_ask_function <- function(row_no) {
+  freefloat_1 <- freefloat_boe[row_no, ]
+  
+  isin_1 <- freefloat_boe[row_no, ] %>%
+    select(ISIN) %>%
+    pull()
+  
+  date_1 <- freefloat_boe[row_no, ] %>%
+    select(operation_date) %>%
+    pull()
+  
+  #tail to avoid chance where there is no bond data observation for date
+  bond_data_1 <- bbg_data %>%
+    filter(ISIN == isin_1 &
+             Dates <= date_1) %>%
+    tail(1)
+  
+  bond_data_2 <- bond_data_1 %>%
+    mutate(YLD_BID_ASK = YLD_YTM_BID - YLD_YTM_ASK,
+           date_dif = date_1 - Dates) %>%
+    select(Dates, ISIN, YLD_YTM_MID, YLD_BID_ASK, date_dif) %>%
+    set_names("operation_date",
+              "ISIN",
+              "YLD_YTM_MID",
+              "YLD_BID_ASK",
+              "date_dif")
+  
+  #change date back to date of operation rather than nearest rounded from bbg data
+  bond_data_2$operation_date <- date_1
+  
+  left_join(freefloat_1, bond_data_2,
+            by = c("operation_date", "ISIN"))
+  
+}
+
+bond_dataset <- bind_rows(lapply(1:nrow(freefloat_boe), bid_ask_function))
+
+
+bond_dataset <- bond_dataset %>% 
+  arrange(operation_date)
+
+
+
+#BOE dataset: bid-ask spread day change; less than,  greater than -----------------------------------------------
+
+onedchng_bid_ask_function <- function(row_no) {
+  df_1 <- bond_dataset[row_no,]
+  
+  #find ISIN
+  isin_1 <- df_1 %>%
+    select(ISIN) %>%
+    pull()
+  
+  #find date of operation
+  date_1 <- df_1 %>%
+    select(operation_date) %>%
+    pull()
+  
+  #filter bond data by t-1 and t+1 or operation dates
+  
+  bond_data_tminus1 <- bbg_data %>%
+    filter(ISIN == isin_1 &
+             Dates < date_1) %>%
+    tail(1)
+  
+  bond_data_tplus1 <- bbg_data %>%
+    filter(ISIN == isin_1 &
+             Dates > date_1) %>%
+    head(1)
+  
+  
+  #find bid-ask spreads for each date
+  bond_data_tminus1_2 <- bond_data_tminus1 %>%
+    mutate(YLD_BID_ASK = YLD_YTM_BID - YLD_YTM_ASK) %>%
+    select(Dates, ISIN, YLD_BID_ASK) %>%
+    set_names("date",
+              "ISIN",
+              "YLD_BID_ASK")
+  
+  bond_data_tplus1_2 <- bond_data_tplus1 %>%
+    mutate(YLD_BID_ASK = YLD_YTM_BID - YLD_YTM_ASK) %>%
+    select(Dates, ISIN, YLD_BID_ASK) %>%
+    set_names("date",
+              "ISIN",
+              "YLD_BID_ASK")
+  
+  #create df with bid-ask day change
+  bond_data_2 <- tibble(
+    "operation_date" = date_1,
+    "ISIN" = isin_1,
+    "1DCHNG_YIELD_BID_ASK" =
+      bond_data_tplus1_2$YLD_BID_ASK - bond_data_tminus1_2$YLD_BID_ASK,
+    "1DCHNG_date_dif" =
+      bond_data_tplus1_2$date - bond_data_tminus1_2$date
+  )
+  
+  
+  #left join to main dataframe
+  df_1 %>%
+    left_join(bond_data_2,
+              by = c("operation_date", "ISIN"))
+}
+
+updated_bond_dataset <- bind_rows(lapply(1:nrow(bond_dataset), onedchng_bid_ask_function))
+
+updated_bond_dataset <- updated_bond_dataset %>% 
+  arrange(operation_date)
+
+bond_dataset <- updated_bond_dataset
+
+#BOE dataset: bid-ask spread day change; less than, end of day -------------------------
+
+onedchng_EOD_bid_ask_function_2 <- function(row_no) {
+  df_1 <- bond_dataset[row_no,]
+  
+  #find ISIN
+  isin_1 <- df_1 %>%
+    select(ISIN) %>%
+    pull()
+  
+  #find date of operation
+  date_1 <- df_1 %>%
+    select(operation_date) %>%
+    pull()
+  
+  #filter bond data by t-1 and t+1 or operation dates
+  
+  bond_data_tminus1 <- bbg_data %>%
+    filter(ISIN == isin_1 &
+             Dates < date_1) %>%
+    tail(1)
+  
+  bond_data_tplus1 <- bbg_data %>%
+    filter(ISIN == isin_1 &
+             Dates >= date_1) %>%
+    head(1)
+  
+  
+  #find bid-ask spreads for each date
+  bond_data_tminus1_2 <- bond_data_tminus1 %>%
+    mutate(YLD_BID_ASK = YLD_YTM_BID - YLD_YTM_ASK) %>%
+    select(Dates, ISIN, YLD_BID_ASK) %>%
+    set_names("date",
+              "ISIN",
+              "YLD_BID_ASK")
+  
+  bond_data_tplus1_2 <- bond_data_tplus1 %>%
+    mutate(YLD_BID_ASK = YLD_YTM_BID - YLD_YTM_ASK) %>%
+    select(Dates, ISIN, YLD_BID_ASK) %>%
+    set_names("date",
+              "ISIN",
+              "YLD_BID_ASK")
+  
+  #create df with bid-ask day change
+  bond_data_2 <- tibble(
+    "operation_date" = date_1,
+    "ISIN" = isin_1,
+    "1DCHNG_EOD_YIELD_BID_ASK" =
+      bond_data_tplus1_2$YLD_BID_ASK - bond_data_tminus1_2$YLD_BID_ASK,
+    "1DCHNG_EOD_date_dif" =
+      bond_data_tplus1_2$date - bond_data_tminus1_2$date
+  )
+  
+  
+  #left join to main dataframe
+  df_1 %>%
+    left_join(bond_data_2,
+              by = c("operation_date", "ISIN"))
+}
+
+updated_bond_dataset <- bind_rows(lapply(1:nrow(bond_dataset), onedchng_EOD_bid_ask_function_2))
+
+updated_bond_dataset <- updated_bond_dataset %>% 
+  arrange(operation_date)
+
+bond_dataset <- updated_bond_dataset
+
+#change percent freefloat to holding ratio
+colnames(boe_dataset)[colnames(boe_dataset) == 'percent_of_freefloat'] <- "holding_ratio"
+
+# BBG dataset: With holding ratios ----------------------------------------------
+
+
+#avoiding a loop switch to func-ception
+
+bbg_hr_function <- function(isin){
+  
+  df1 <- bbg_data %>% 
+    filter(ISIN == isin)
+  
+  df_rows <- 1:nrow(df1)
+  
+  bbg_hr_row_function <- function(row_no) {
+    
+    date_1 <- df1[row_no, ] %>%
+      select(Dates) %>%
+      pull()
+    
+    if(date_1 < freefloat_boe[1,1]){
+      
+      bond_holding_ratio <- tibble(percent_of_freefloat = 0)
+      
+    }else{
+      
+      bond_holding_ratio <- bond_dataset %>%
+        filter(ISIN == isin &
+                 operation_date <= date_1) %>%
+        tail(1) %>%
+        select(percent_of_freefloat)
+    }
+    
+    merge(df1 %>%
+            filter(Dates == date_1),
+          bond_holding_ratio)
+    
+  }
+  
+  bind_rows(lapply(df_rows, bbg_hr_row_function))
+  
+}
+
+bbg_isins <- bbg_data %>% 
+  select(ISIN) %>% 
+  unique() %>% 
+  pull()
+
+test_isins <- bbg_isins[1:4]
+
+rest_isins <- bbg_isins[-c(1:4)]
+
+
+start_time <- Sys.time()
+
+# bbg_hr_rest <- lapply(rest_isins, bbg_hr_function)
+
+end_time <- Sys.time()
+end_time - start_time
+
+
+bbg_hr <- append(bbg_hr_test,
+                 bbg_hr_rest)
+
+bbg_hr_dataset <- bind_rows(bbg_hr)
+
+# saveRDS(bbg_hr_dataset, here('output', 'bbg_hr_dataset.RDS'))
+
+#BOE dataset: QE programme dates ------------------------------------------------------
+qe_prog_df <- read_excel(here('input', 'qe_prog_data.xlsx'),
+                         sheet = 'programme')
+
+
+qe_maturity_sectors <- read_excel(here('input', 'qe_prog_data.xlsx'),
+                                  sheet = 'maturity_sectors') %>% 
+  mutate(across(c(2:7), as.numeric))%>%
+  mutate(def_range = row_number()) %>%
+  select(-date) %>% 
+  pivot_longer(c(-7,-8))
+
+bond_dataset <- bond_dataset %>% 
+  mutate(
+    prog = case_when(
+      operation_date >= qe_prog_df$start_date[1] &
+        operation_date <= qe_prog_df$end_date[1] ~
+        qe_prog_df$qe_programme[1],
+      operation_date >= qe_prog_df$start_date[2] &
+        operation_date <= qe_prog_df$end_date[2] ~
+        qe_prog_df$qe_programme[2],
+      operation_date >= qe_prog_df$start_date[3] &
+        operation_date <= qe_prog_df$end_date[3] ~
+        qe_prog_df$qe_programme[3],
+      operation_date >= qe_prog_df$start_date[4] &
+        operation_date <= qe_prog_df$end_date[4] ~
+        qe_prog_df$qe_programme[4],
+      operation_date >= qe_prog_df$start_date[5] &
+        operation_date <= qe_prog_df$end_date[5] ~
+        qe_prog_df$qe_programme[5]
+    ))
+
+# bond_dataset_2 <- read_excel(here('output', 'bond_dataset_v2.xlsx'),
+#                              sheet = 'bond_dataset (value)')
+# 
+# 
+# write.dta(bond_dataset_2, here('stata','bond_dataset_v3.dta') )
+# 
+# bond_dataset_2 <- bond_dataset_2 %>% 
+#   mutate(maturity = as.Date.POSIXct(maturity),
+#          issue_date = as.Date.POSIXct(issue_date))
+
+
+#BBG dataset -------------------------------------------------------------
+
+bbg_hr_dataset <- readRDS(here('output', 'bbg_hr_dataset.RDS'))
+
+bbg_hr_dataset <- bbg_hr_dataset %>% 
+  select(-`y[FALSE, ]`)
+
+#add maturity date
+bond_maturities <- read_excel(here('input','bbg_gilt_data.xlsx'),
+                              sheet = "boe_maturities")
+
+bond_maturities <- bond_maturities %>% 
+  mutate(ISIN = gsub(" Corp","",ISIN),
+         maturity = as.Date.POSIXct(dmy(Maturity), tz = 'GMT')) %>% 
+  select(-Maturity)
+
+bbg_hr_dataset <- bbg_hr_dataset %>% 
+  left_join(bond_maturities,
+            by = "ISIN")
+
+#calculate residual maturity
+bbg_hr_dataset <- bbg_hr_dataset %>% 
+  mutate(res_mat =
+           time_length(as.Date(maturity) - as.Date(Dates), unit = "years"))
+
+#filter out residual maturity <90 days??
+
+#add QE programme date 
+
+bbg_hr_dataset <- bbg_hr_dataset %>%
+  mutate(
+    prog = case_when(
+      Dates >= qe_prog_df$start_date[1] &
+        Dates <= qe_prog_df$end_date[1] ~
+        qe_prog_df$qe_programme[1],
+      Dates >= qe_prog_df$start_date[2] &
+        Dates <= qe_prog_df$end_date[2] ~
+        qe_prog_df$qe_programme[2],
+      Dates >= qe_prog_df$start_date[3] &
+        Dates <= qe_prog_df$end_date[3] ~
+        qe_prog_df$qe_programme[3],
+      Dates >= qe_prog_df$start_date[4] &
+        Dates <= qe_prog_df$end_date[4] ~
+        qe_prog_df$qe_programme[4],
+      Dates >= qe_prog_df$start_date[5] &
+        Dates <= qe_prog_df$end_date[5] ~
+        qe_prog_df$qe_programme[5]
+    )
+  ) 
+
+
+# BBG dataset: bid-ask spreads ---------------------------------------------------------
+
+# v1: bid - ask v2: bid - ask as percentage of security (from JGB study)
+bbg_hr_dataset <- bbg_hr_dataset %>% 
+  mutate(bid_ask_v1 =
+           YLD_YTM_BID - YLD_YTM_ASK,
+         bid_ask_v2 =
+           (YLD_YTM_BID - YLD_YTM_ASK)/YLD_YTM_MID)
+
+#worth attempting with price data to be inline with JGB study?? 
+#JGB study filters out res mat < 90days due to impact on YTM 
+bbg_hr_dataset <- bbg_hr_dataset %>% 
+  filter(res_mat >= (90/365))
+
 
 # BBG price data ----------------------------------------------------------
 
@@ -390,7 +746,7 @@ bbg_hr_dataset <- readRDS(here('output','bbg_hr_dataset.RDS'))
 #loop to split up data by bond
 bbg_price_list <- list()
 
-for(i in seq(2,238,2)) {
+for(i in seq(2,238,3)) {
   
   #select data
   df <- bbg_price_data %>%
@@ -415,7 +771,29 @@ for(i in seq(2,238,2)) {
   
 }
 
-bbg_price_list_long <- bind_rows(bbg_gilt_list)
+bbg_price_list_long <- bind_rows(bbg_price_list)
 
 
+bbg_hr_dataset <- bbg_hr_dataset %>% 
+  left_join(bbg_price_list_long,
+            by = c("Dates","ISIN"))
 
+#testing if JGB study with prices = yield version 
+
+bbg_hr_dataset <- bbg_hr_dataset %>% 
+  mutate(bid_ask_v3 =
+           ((PX_ASK - PX_BID)/rowMeans(bbg_hr_dataset[,c("PX_ASK","PX_BID")])))
+
+
+# WRITE:  ------------------------------------------------------
+
+###BOE dataset
+
+saveRDS(boe_dataset, here('output','boe_dataset.RDS'))
+
+write.dta(boe_dataset, here('stata','boe_dataset.dta') )
+
+###BBG dataset
+write.dta(bbg_dataset, here('stata','bbg_dataset.dta'))
+
+saveRDS(bbg_dataset, here('output', 'bbg_dataset.RDS'))
