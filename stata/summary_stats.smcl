@@ -1,0 +1,205 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/harryaustin/R/Dissertation/stata/summary_stats.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}15 Mar 2023, 18:07:19
+
+{com}. do "/var/folders/mv/pw8hph391ygcfytj_k0kxrfr0000gn/T//SD26631.000000"
+{txt}
+{com}. clear
+{txt}
+{com}. use boe_dataset.dta
+{txt}(Written by R.              )
+
+{com}. 
+. describe
+
+{txt}Contains data from {res}boe_dataset.dta
+{txt} Observations:{res}         7,680                  Written by R.              
+{txt}    Variables:{res}            24                  
+{txt}{hline}
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+{hline}
+{p 0 48}{res}{bind:operation_date }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}operation_date{p_end}
+{p 0 48}{bind:ISIN           }{txt}{bind: str12   }{bind:{txt}%12s      }{space 1}{bind:         }{bind:  }{res}{res}ISIN{p_end}
+{p 0 48}{bind:proceeds_offers}{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}proceeds_offers{p_end}
+{p 0 48}{bind:proceeds_purc~s}{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}proceeds_purchases{p_end}
+{p 0 48}{bind:nominal_purch~s}{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}nominal_purchases{p_end}
+{p 0 48}{bind:tail           }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}tail{p_end}
+{p 0 48}{bind:res_mat        }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}res_mat{p_end}
+{p 0 48}{bind:maturity       }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}maturity{p_end}
+{p 0 48}{bind:cuml_nom_purch }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}cuml_nom_purch{p_end}
+{p 0 48}{bind:issue_date     }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}issue_date{p_end}
+{p 0 48}{bind:cumulative_to~e}{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}cumulative_total_in_issue{p_end}
+{p 0 48}{bind:holding_ratio  }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}holding_ratio{p_end}
+{p 0 48}{bind:bid_cover      }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}bid_cover{p_end}
+{p 0 48}{bind:YLD_YTM_MID    }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}YLD_YTM_MID{p_end}
+{p 0 48}{bind:YLD_BID_ASK    }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}YLD_BID_ASK{p_end}
+{p 0 48}{bind:prog           }{txt}{bind: str3    }{bind:{txt}%3s       }{space 1}{bind:         }{bind:  }{res}{res}prog{p_end}
+{p 0 48}{bind:YLD_YTM_BID    }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}YLD_YTM_BID{p_end}
+{p 0 48}{bind:YLD_YTM_ASK    }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}YLD_YTM_ASK{p_end}
+{p 0 48}{bind:PX_MID         }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}PX_MID{p_end}
+{p 0 48}{bind:PX_ASK         }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}PX_ASK{p_end}
+{p 0 48}{bind:PX_BID         }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}PX_BID{p_end}
+{p 0 48}{bind:bid_ask_v1     }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}bid_ask_v1{p_end}
+{p 0 48}{bind:bid_ask_v2     }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}bid_ask_v2{p_end}
+{p 0 48}{bind:bid_ask_v3     }{txt}{bind: double  }{bind:{txt}%9.0g     }{space 1}{bind:         }{bind:  }{res}{res}bid_ask_v3{p_end}
+{txt}{hline}
+Sorted by: 
+
+{com}. 
+. format operation_date %td
+{txt}
+{com}. 
+. encode ISIN, generate(isin)
+{txt}
+{com}. encode prog, generate(programme)
+{txt}
+{com}. 
+. summarize
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+operation_~e {c |}{res}      7,680    21048.71    1482.589      17967      22629
+{txt}{space 8}ISIN {c |}{res}          0
+{txt}proceeds_o~s {c |}{res}      7,680    392.6125    590.4497          0     7455.6
+{txt}proceeds_p~s {c |}{res}      7,680    144.1977    248.0148          0     2786.8
+{txt}nominal_pu~s {c |}{res}      7,680    125.5937    222.9106          0       2000
+{txt}{hline 13}{c +}{hline 57}
+{space 8}tail {c |}{res}      7,680    .0436604    .1111039          0       2.27
+{txt}{space 5}res_mat {c |}{res}      7,680    20.73719    13.41803   3.000684    54.8063
+{txt}{space 4}maturity {c |}{res}      7,680    28622.97    5345.124      19424      40837
+{txt}cuml_nom_p~h {c |}{res}      7,680    8579.425    5982.953          0    28835.4
+{txt}{space 2}issue_date {c |}{res}      7,680    20872.84    1456.731      17918      22622
+{txt}{hline 13}{c +}{hline 57}
+cumulative~e {c |}{res}      7,680    25081.32     7378.11       4000   41895.74
+{txt}holding_ra~o {c |}{res}      7,680    .3179987    .1595283          0   .7525739
+{txt}{space 3}bid_cover {c |}{res}      5,067    4.595222    13.24102          1        314
+{txt}{space 1}YLD_YTM_MID {c |}{res}      7,680     1.36872    1.087811      -.171      4.627
+{txt}{space 1}YLD_BID_ASK {c |}{res}      7,680     .004937     .003056       .001        .04
+{txt}{hline 13}{c +}{hline 57}
+{space 8}prog {c |}{res}          0
+{txt}{space 1}YLD_YTM_BID {c |}{res}      7,680    1.371202    1.087626      -.169      4.629
+{txt}{space 1}YLD_YTM_ASK {c |}{res}      7,680    1.366265    1.087991      -.173      4.624
+{txt}{space 6}PX_MID {c |}{res}      7,680    132.4083    31.35372     74.704    236.717
+{txt}{space 6}PX_ASK {c |}{res}      7,680    132.4527    31.37133     74.746    236.826
+{txt}{hline 13}{c +}{hline 57}
+{space 6}PX_BID {c |}{res}      7,680    132.3636     31.3361     74.662    236.608
+{txt}{space 2}bid_ask_v1 {c |}{res}      7,680     .004937     .003056       .001        .04
+{txt}{space 2}bid_ask_v2 {c |}{res}      7,679    .0067748    .1640144         -6          5
+{txt}{space 2}bid_ask_v3 {c |}{res}      7,680    .0006512    .0004303    .000075   .0038297
+{txt}{space 8}isin {c |}{res}      7,680    34.96159    21.46257          1         79
+{txt}{hline 13}{c +}{hline 57}
+{space 3}programme {c |}{res}      7,680    3.933984    1.340637          1          5
+{txt}
+{com}. 
+. *summary statistics by programme 
+. by programme, sort : summarize res_mat nominal_purchases holding_ratio YLD_YTM_MID bid_ask_v1 bid_ask_v2 bid_ask_v3
+
+{txt}{hline}
+-> programme = QE1
+
+    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 5}res_mat {c |}{res}        662    16.17461    11.11845   3.126626   50.17933
+{txt}nominal_pu~s {c |}{res}        662    268.4837    315.4463          0       2000
+{txt}holding_ra~o {c |}{res}        662    .2219847    .1532621          0   .7525739
+{txt}{space 1}YLD_YTM_MID {c |}{res}        662    3.619875    .6509679      2.006      4.627
+{txt}{space 2}bid_ask_v1 {c |}{res}        662    .0066495    .0024822       .003       .017
+{txt}{hline 13}{c +}{hline 57}
+{space 2}bid_ask_v2 {c |}{res}        662    .0020202    .0012158   .0007092   .0074776
+{txt}{space 2}bid_ask_v3 {c |}{res}        662    .0005979    .0002104   .0003457   .0026332
+
+{txt}{hline}
+-> programme = QE2
+
+    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 5}res_mat {c |}{res}        737    18.22793    13.32701   3.017112     48.282
+{txt}nominal_pu~s {c |}{res}        737    145.4664    180.1567          0       1466
+{txt}holding_ra~o {c |}{res}        737    .2762317    .1281744          0   .5642128
+{txt}{space 1}YLD_YTM_MID {c |}{res}        737    2.320373    .9384655       .477      3.558
+{txt}{space 2}bid_ask_v1 {c |}{res}        737    .0047205    .0017548       .002       .013
+{txt}{hline 13}{c +}{hline 57}
+{space 2}bid_ask_v2 {c |}{res}        737    .0030366    .0031427   .0006207   .0197269
+{txt}{space 2}bid_ask_v3 {c |}{res}        737    .0004998    .0002373   .0001303   .0013415
+
+{txt}{hline}
+-> programme = QE3
+
+    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 5}res_mat {c |}{res}        988    18.50503    13.46066   3.008898    54.8063
+{txt}nominal_pu~s {c |}{res}        988    101.7127     135.513          0        838
+{txt}holding_ra~o {c |}{res}        988    .3092589    .1409461   .0028411   .6446725
+{txt}{space 1}YLD_YTM_MID {c |}{res}        988    2.075247    .8955577       .114      3.528
+{txt}{space 2}bid_ask_v1 {c |}{res}        988    .0035516    .0016504       .001       .014
+{txt}{hline 13}{c +}{hline 57}
+{space 2}bid_ask_v2 {c |}{res}        988    .0030417    .0055163   .0002871   .0683761
+{txt}{space 2}bid_ask_v3 {c |}{res}        988    .0003994    .0002562    .000075   .0012008
+
+{txt}{hline}
+-> programme = QE4
+
+    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 5}res_mat {c |}{res}      1,352    20.81974     14.2787   3.003422   53.24572
+{txt}nominal_pu~s {c |}{res}      1,352    96.40562    216.5465          0     1217.1
+{txt}holding_ra~o {c |}{res}      1,352    .2604515    .1519619          0   .6852092
+{txt}{space 1}YLD_YTM_MID {c |}{res}      1,352    1.234402    .5495643       .003      2.098
+{txt}{space 2}bid_ask_v1 {c |}{res}      1,352    .0049941    .0026364       .001       .019
+{txt}{hline 13}{c +}{hline 57}
+{space 2}bid_ask_v2 {c |}{res}      1,352    .0091506    .0574768   .0005435          2
+{txt}{space 2}bid_ask_v3 {c |}{res}      1,352    .0006506    .0004691   .0000858    .003225
+
+{txt}{hline}
+-> programme = QE5
+
+    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 5}res_mat {c |}{res}      3,941    22.50413    13.13911   3.000684    51.6167
+{txt}nominal_pu~s {c |}{res}      3,941    113.8752    222.1037          0       1435
+{txt}holding_ra~o {c |}{res}      3,941    .3638709    .1567172          0   .7085416
+{txt}{space 1}YLD_YTM_MID {c |}{res}      3,941    .6815638    .3763762      -.171      1.476
+{txt}{space 2}bid_ask_v1 {c |}{res}      3,941    .0050175    .0035408       .001        .04
+{txt}{hline 13}{c +}{hline 57}
+{space 2}bid_ask_v2 {c |}{res}      3,940    .0083937    .2264471         -6          5
+{txt}{space 2}bid_ask_v3 {c |}{res}      3,941    .0007517    .0004693    .000128   .0038297
+
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/mv/pw8hph391ygcfytj_k0kxrfr0000gn/T//SD26631.000000"
+{txt}
+{com}. table () ( programme ) (), statistic(frequency) statistic(mean holding_ratio) statistic(sd holding_ratio) statistic(skewness holding_ratio) statistic(q1 holding_ratio) statistic(q2 holding_ratio) statistic(q3 holding_ratio) statistic(max holding_ratio)
+{res}
+{smcl}
+{reset}{...}
+{hline 18}{c -}{c TT}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 9}{c -}{c -}{c -}{hline 9}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}
+{space 18} {c |}  {space 31}prog{space 30}
+{space 18} {c |}  {space 5}QE1   {space 6}QE2   {space 6}QE3   {space 5}QE4   {space 5}QE5   {space 3}Total
+{hline 18}{c -}{c +}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 9}{c -}{c -}{c -}{hline 9}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}
+Frequency{space 9} {c |}  {space 5}{result:662}   {space 6}{result:737}   {space 6}{result:988}   {space 3}{result:1,352}   {space 3}{result:3,941}   {space 3}{result:7,680}
+Mean{space 14} {c |}  {result:.2219847}   {space 1}{result:.2762317}   {space 1}{result:.3092589}   {result:.2604515}   {result:.3638709}   {result:.3179987}
+Standard deviation {c |}  {result:.1532621}   {space 1}{result:.1281744}   {space 1}{result:.1409461}   {result:.1519619}   {result:.1567172}   {result:.1595283}
+Skewness{space 10} {c |}  {result:.6101083}   {result:-.1158838}   {result:-.1452712}   {result:.3627679}   {result:.1683653}   {result:.1941987}
+First quartile{space 4} {c |}  {result:.0954919}   {space 1}{result:.1795432}   {space 1}{result:.2275615}   {result:.1307554}   {space 2}{result:.24581}   {result:.2120415}
+Second quartile{space 3} {c |}  {result:.2038385}   {space 1}{result:.2843742}   {space 3}{result:.31568}   {result:.2804228}   {result:.3538368}   {result:.3142991}
+Third quartile{space 4} {c |}  {result:.3207059}   {space 1}{result:.3733226}   {space 1}{result:.4064464}   {result:.3555313}   {result:.4620327}   {result:.4159111}
+Maximum value{space 5} {c |}  {result:.7525739}   {space 1}{result:.5642128}   {space 1}{result:.6446725}   {result:.6852092}   {result:.7085416}   {result:.7525739}
+{hline 18}{c -}{c BT}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 9}{c -}{c -}{c -}{hline 9}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}{c -}{c -}{c -}{hline 8}
+
+{com}. 
+{txt}end of do-file
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/harryaustin/R/Dissertation/stata/summary_stats.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}15 Mar 2023, 18:07:42
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

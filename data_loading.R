@@ -142,7 +142,7 @@ price_paths <- list.files(here('input','dmo_gilt_prices'), full.names = TRUE)
 
 saveRDS(dmo_prices_list, here('output', 'dmo_prices_list.RDS'))
 
-# Read in gilt data  ------------------------------------------------------
+# BBG FULL dataset  ------------------------------------------------------
 
 bbg_gilt_data <- read_xlsx(here('input', 'bbg_gilt_data.xlsx'), sheet = 'data (values)')
 
@@ -207,17 +207,27 @@ mat_check_function <- function(isin) {
 mat_checked_bbg_gilts <- bind_rows(lapply(bbg_isins, mat_check_function))
 
 #check to make sure no observation of a bond is greater than its maturity 
-mat_checked_bbg_gilts %>% 
+bbg_gilts_long <- bbg_gilts_long %>% 
   left_join(boe_maturities %>% 
               select(ISIN, maturity),
-            by = "ISIN") %>% 
-  mutate(maturity - Dates) %>% 
-  skim()
+            by = "ISIN")
 
 bbg_gilts_long <- mat_checked_bbg_gilts
 
+bbg_gilts_long <- bbg_gilts_long %>% 
+  mutate(res_mat =
+           time_length(as.Date(maturity) - as.Date(Dates), unit = "years"))
 
-saveRDS(bbg_gilts_long, here('output','bbg_gilts_long.RDS'))
+
+##JUMP TO 'BBG price data' to run tidying loop for prices
+#left join price data
+bbg_full_dataset <- bbg_full_dataset %>% 
+  left_join(bbg_price_list_long,
+            by = c("Dates", "ISIN"))
+
+
+saveRDS(bbg_gilts_long, here('output','bbg_full_dataset.RDS'))
+saveRDS(bbg_full_dataset, here('output','bbg_full_dataset.RDS'))
 
 # Combining data ----------------------------------------------------------
 
@@ -663,6 +673,20 @@ bond_dataset <- bond_dataset %>%
 # bond_dataset_2 <- bond_dataset_2 %>% 
 #   mutate(maturity = as.Date.POSIXct(maturity),
 #          issue_date = as.Date.POSIXct(issue_date))
+bbg_subset <- bbg_full_dataset %>% 
+  select(Dates,ISIN,YLD_YTM_BID,
+         YLD_YTM_ASK,PX_MID,PX_ASK,
+         PX_BID,bid_ask_v1,bid_ask_v2,
+         bid_ask_v3)
+
+colnames(bbg_subset)[1] <- "operation_date"
+
+boe_dataset <- boe_dataset %>% 
+  select(-c(`1DCHNG_YIELD_BID_ASK`,`1DCHNG_date_dif`,`1DCHNG_EOD_YIELD_BID_ASK`,
+            `1DCHNG_EOD_date_dif`, date_dif)) %>% 
+  left_join(bbg_subset,
+            by = c("operation_date", "ISIN"))
+
 
 
 #BBG dataset -------------------------------------------------------------

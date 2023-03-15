@@ -1,0 +1,1278 @@
+{\rtf1\ansi\deff0 {\fonttbl{\f0\fnil Garamond;}}
+{\info {\author .}{\company .}{\title .}}
+\deflang1033\plain\fs20
+{\footer\pard\qc\plain\f0\fs20\chpgn\par}
+{
+{\b\qc\line  }{\par}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql { -> programme = QE1}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql { }\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx1500
+\fs20\pard\intbl\ql { Variable }\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx2700
+\fs20\pard\intbl\ql { Obs}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx3900
+\fs20\pard\intbl\ql { Mean}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx5100
+\fs20\pard\intbl\ql { Std.}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx6300
+\fs20\pard\intbl\ql { dev.}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx7500
+\fs20\pard\intbl\ql { Min}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx8700
+\fs20\pard\intbl\ql { Max}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {res_mat }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {   16.175}\cell
+\cellx5100
+\fs20\pard\intbl\ql {   11.118}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    3.127}\cell
+\cellx7500
+\fs20\pard\intbl\ql {   50.179}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {nominal_pu~s }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {  268.484}\cell
+\cellx5100
+\fs20\pard\intbl\ql {  315.446}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {2000}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {holding_ra~o }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.222}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.153}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.753}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {YLD_YTM_MID }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    3.620}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.651}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    2.006}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    4.627}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v1 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.007}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.002}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.017}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v2 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.002}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.007}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v3 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.003}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql {}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\clbrdrb\brdrw15\brdrs\cellx3000\cell
+\row}
+\fs20 {-> programme = QE2}\line
+{\par}
+{\trowd\trgaph108\trleft-108
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx1500
+\fs20\pard\intbl\ql {Variable }\cell
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx2700
+\fs20\pard\intbl\ql {Obs}\cell
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx3900
+\fs20\pard\intbl\ql {Mean}\cell
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx5100
+\fs20\pard\intbl\ql {Std.}\cell
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx6300
+\fs20\pard\intbl\ql {dev.}\cell
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx7500
+\fs20\pard\intbl\ql {Min}\cell
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx8700
+\fs20\pard\intbl\ql {Max}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {res_mat }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {   18.228}\cell
+\cellx5100
+\fs20\pard\intbl\ql {   13.327}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    3.017}\cell
+\cellx7500
+\fs20\pard\intbl\ql {   48.282}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {nominal_pu~s }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {  145.466}\cell
+\cellx5100
+\fs20\pard\intbl\ql {  180.157}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {1466}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {holding_ra~o }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.276}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.128}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.564}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {YLD_YTM_MID }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    2.320}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.938}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.477}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    3.558}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v1 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.005}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.002}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.002}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.013}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v2 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.020}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v3 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.001}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql { -> programme = QE3}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql { }\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx1500
+\fs20\pard\intbl\ql { Variable }\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx2700
+\fs20\pard\intbl\ql { Obs}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx3900
+\fs20\pard\intbl\ql { Mean}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx5100
+\fs20\pard\intbl\ql { Std.}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx6300
+\fs20\pard\intbl\ql { dev.}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx7500
+\fs20\pard\intbl\ql { Min}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx8700
+\fs20\pard\intbl\ql { Max}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {res_mat }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {   18.505}\cell
+\cellx5100
+\fs20\pard\intbl\ql {   13.461}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    3.009}\cell
+\cellx7500
+\fs20\pard\intbl\ql {   54.806}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {nominal_pu~s }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {  101.713}\cell
+\cellx5100
+\fs20\pard\intbl\ql {  135.513}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {838}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {holding_ra~o }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.309}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.141}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.645}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {YLD_YTM_MID }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    2.075}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.896}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.114}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    3.528}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v1 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.004}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.002}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.014}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v2 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.006}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.068}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v3 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.001}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql {}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\clbrdrb\brdrw15\brdrs\cellx3000\cell
+\row}
+\fs20 {-> programme = QE4}\line
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {Variable }\cell
+\cellx2700
+\fs20\pard\intbl\ql {Obs}\cell
+\cellx3900
+\fs20\pard\intbl\ql {Mean}\cell
+\cellx5100
+\fs20\pard\intbl\ql {Std.}\cell
+\cellx6300
+\fs20\pard\intbl\ql {dev.}\cell
+\cellx7500
+\fs20\pard\intbl\ql {Min}\cell
+\cellx8700
+\fs20\pard\intbl\ql {Max}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {res_mat }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {   20.820}\cell
+\cellx5100
+\fs20\pard\intbl\ql {   14.279}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    3.003}\cell
+\cellx7500
+\fs20\pard\intbl\ql {   53.246}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {nominal_pu~s }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {   96.406}\cell
+\cellx5100
+\fs20\pard\intbl\ql {  216.547}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql { 1217.100}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {holding_ra~o }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.260}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.152}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.685}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {YLD_YTM_MID }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    1.234}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.550}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    2.098}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v1 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.005}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.019}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v2 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.009}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.057}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {2}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v3 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.003}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql { -> programme = QE5}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql { }\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx1500
+\fs20\pard\intbl\ql { Variable }\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx2700
+\fs20\pard\intbl\ql { Obs}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx3900
+\fs20\pard\intbl\ql { Mean}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx5100
+\fs20\pard\intbl\ql { Std.}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx6300
+\fs20\pard\intbl\ql { dev.}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx7500
+\fs20\pard\intbl\ql { Min}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx8700
+\fs20\pard\intbl\ql { Max}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {res_mat }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,941}\cell
+\cellx3900
+\fs20\pard\intbl\ql {   22.504}\cell
+\cellx5100
+\fs20\pard\intbl\ql {   13.139}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    3.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {   51.617}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {nominal_pu~s }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,941}\cell
+\cellx3900
+\fs20\pard\intbl\ql {  113.875}\cell
+\cellx5100
+\fs20\pard\intbl\ql {  222.104}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {1435}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {holding_ra~o }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,941}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.364}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.157}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.709}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {YLD_YTM_MID }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,941}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.682}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.376}\cell
+\cellx6300
+\fs20\pard\intbl\ql {   -0.171}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    1.476}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v1 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,941}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.005}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.004}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {.04}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v2 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,940}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.008}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.226}\cell
+\cellx6300
+\fs20\pard\intbl\ql {-6}\cell
+\cellx7500
+\fs20\pard\intbl\ql {5}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v3 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,941}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.004}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql {}\cell
+\row}
+
+{\b\qc\line  }{\par}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql { -> programme = QE1}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql { }\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx1500
+\fs20\pard\intbl\ql { Variable }\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx2700
+\fs20\pard\intbl\ql { Obs}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx3900
+\fs20\pard\intbl\ql { Mean}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx5100
+\fs20\pard\intbl\ql { Std.}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx6300
+\fs20\pard\intbl\ql { dev.}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx7500
+\fs20\pard\intbl\ql { Min}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx8700
+\fs20\pard\intbl\ql { Max}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {res_mat }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {   16.175}\cell
+\cellx5100
+\fs20\pard\intbl\ql {   11.118}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    3.127}\cell
+\cellx7500
+\fs20\pard\intbl\ql {   50.179}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {nominal_pu~s }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {  268.484}\cell
+\cellx5100
+\fs20\pard\intbl\ql {  315.446}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {2000}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {holding_ra~o }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.222}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.153}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.753}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {YLD_YTM_MID }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    3.620}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.651}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    2.006}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    4.627}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v1 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.007}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.002}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.017}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v2 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.002}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.007}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v3 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {662}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.003}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql {}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\clbrdrb\brdrw15\brdrs\cellx3000\cell
+\row}
+\fs20 {-> programme = QE2}\line
+{\par}
+{\trowd\trgaph108\trleft-108
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx1500
+\fs20\pard\intbl\ql {Variable }\cell
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx2700
+\fs20\pard\intbl\ql {Obs}\cell
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx3900
+\fs20\pard\intbl\ql {Mean}\cell
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx5100
+\fs20\pard\intbl\ql {Std.}\cell
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx6300
+\fs20\pard\intbl\ql {dev.}\cell
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx7500
+\fs20\pard\intbl\ql {Min}\cell
+\clbrdrt\brdrw10\brdrs\clbrdrb\brdrw25\brdrs\cellx8700
+\fs20\pard\intbl\ql {Max}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {res_mat }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {   18.228}\cell
+\cellx5100
+\fs20\pard\intbl\ql {   13.327}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    3.017}\cell
+\cellx7500
+\fs20\pard\intbl\ql {   48.282}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {nominal_pu~s }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {  145.466}\cell
+\cellx5100
+\fs20\pard\intbl\ql {  180.157}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {1466}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {holding_ra~o }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.276}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.128}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.564}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {YLD_YTM_MID }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    2.320}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.938}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.477}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    3.558}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v1 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.005}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.002}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.002}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.013}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v2 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.020}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v3 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {737}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.001}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql { -> programme = QE3}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql { }\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx1500
+\fs20\pard\intbl\ql { Variable }\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx2700
+\fs20\pard\intbl\ql { Obs}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx3900
+\fs20\pard\intbl\ql { Mean}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx5100
+\fs20\pard\intbl\ql { Std.}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx6300
+\fs20\pard\intbl\ql { dev.}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx7500
+\fs20\pard\intbl\ql { Min}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx8700
+\fs20\pard\intbl\ql { Max}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {res_mat }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {   18.505}\cell
+\cellx5100
+\fs20\pard\intbl\ql {   13.461}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    3.009}\cell
+\cellx7500
+\fs20\pard\intbl\ql {   54.806}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {nominal_pu~s }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {  101.713}\cell
+\cellx5100
+\fs20\pard\intbl\ql {  135.513}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {838}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {holding_ra~o }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.309}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.141}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.645}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {YLD_YTM_MID }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    2.075}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.896}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.114}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    3.528}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v1 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.004}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.002}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.014}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v2 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.006}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.068}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v3 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {988}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.001}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql {}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\clbrdrb\brdrw15\brdrs\cellx3000\cell
+\row}
+\fs20 {-> programme = QE4}\line
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {Variable }\cell
+\cellx2700
+\fs20\pard\intbl\ql {Obs}\cell
+\cellx3900
+\fs20\pard\intbl\ql {Mean}\cell
+\cellx5100
+\fs20\pard\intbl\ql {Std.}\cell
+\cellx6300
+\fs20\pard\intbl\ql {dev.}\cell
+\cellx7500
+\fs20\pard\intbl\ql {Min}\cell
+\cellx8700
+\fs20\pard\intbl\ql {Max}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {res_mat }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {   20.820}\cell
+\cellx5100
+\fs20\pard\intbl\ql {   14.279}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    3.003}\cell
+\cellx7500
+\fs20\pard\intbl\ql {   53.246}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {nominal_pu~s }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {   96.406}\cell
+\cellx5100
+\fs20\pard\intbl\ql {  216.547}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql { 1217.100}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {holding_ra~o }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.260}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.152}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.685}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {YLD_YTM_MID }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    1.234}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.550}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    2.098}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v1 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.005}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.003}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.019}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v2 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.009}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.057}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {2}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v3 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {1,352}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.003}\cell
+\row}
+{\par}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql { -> programme = QE5}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql { }\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx1500
+\fs20\pard\intbl\ql { Variable }\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx2700
+\fs20\pard\intbl\ql { Obs}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx3900
+\fs20\pard\intbl\ql { Mean}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx5100
+\fs20\pard\intbl\ql { Std.}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx6300
+\fs20\pard\intbl\ql { dev.}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx7500
+\fs20\pard\intbl\ql { Min}\cell
+\clbrdrt\brdrw10\brdrs \clbrdrb\brdrw25\brdrs \cellx8700
+\fs20\pard\intbl\ql { Max}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {res_mat }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,941}\cell
+\cellx3900
+\fs20\pard\intbl\ql {   22.504}\cell
+\cellx5100
+\fs20\pard\intbl\ql {   13.139}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    3.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {   51.617}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {nominal_pu~s }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,941}\cell
+\cellx3900
+\fs20\pard\intbl\ql {  113.875}\cell
+\cellx5100
+\fs20\pard\intbl\ql {  222.104}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {1435}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {holding_ra~o }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,941}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.364}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.157}\cell
+\cellx6300
+\fs20\pard\intbl\ql {0}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.709}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {YLD_YTM_MID }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,941}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.682}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.376}\cell
+\cellx6300
+\fs20\pard\intbl\ql {   -0.171}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    1.476}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v1 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,941}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.005}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.004}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx7500
+\fs20\pard\intbl\ql {.04}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v2 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,940}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.008}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.226}\cell
+\cellx6300
+\fs20\pard\intbl\ql {-6}\cell
+\cellx7500
+\fs20\pard\intbl\ql {5}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx1500
+\fs20\pard\intbl\ql {bid_ask_v3 }\cell
+\cellx2700
+\fs20\pard\intbl\ql {3,941}\cell
+\cellx3900
+\fs20\pard\intbl\ql {    0.001}\cell
+\cellx5100
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx6300
+\fs20\pard\intbl\ql {    0.000}\cell
+\cellx7500
+\fs20\pard\intbl\ql {    0.004}\cell
+\row}
+{\trowd\trgaph108\trleft-108
+\cellx3000
+\fs20\pard\intbl\ql {}\cell
+\row}
+
+
+\writepositionforappend
+}}
