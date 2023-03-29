@@ -298,7 +298,7 @@ ois_clean <- ois_raw[-c(1:3),] %>%
   set_names(c("date",ois_raw[3,-1]))
 
 ois_clean <- ois_clean %>% 
-  mutate(date = as.Date(as.numeric(ois_clean$date), origin = "1900-01-01"))
+  mutate(date = as.Date(as.numeric(ois_clean$date), origin = "1899-12-30", tz = "GMT"))
 
 ois_clean <- ois_clean %>% 
   mutate(across(c(2:length(ois_clean)), as.numeric))
@@ -809,6 +809,100 @@ bbg_hr_dataset <- bbg_hr_dataset %>%
            ((PX_ASK - PX_BID)/rowMeans(bbg_hr_dataset[,c("PX_ASK","PX_BID")])))
 
 
+# BOE maturity sectors ----------------------------------------------------
+
+mat_sec <- read_excel(here('output','boe_dataset_mat_sec.xlsx'),
+           sheet = "boe_dataset (2)") %>% 
+  select(operation_date, ISIN, maturity_sector)
+
+
+boe_dataset_mat_sec <- boe_dataset %>% 
+  left_join(mat_sec,
+            by = c("operation_date", "ISIN"))
+
+boe_dataset_mat_sec <- boe_dataset_mat_sec %>% 
+  mutate(operation_date = as.Date.POSIXct(operation_date))
+
+identical(boe_dataset,
+          boe_dataset_mat_sec %>% 
+            select(-maturity_sector))
+
+boe_dataset <- boe_dataset_mat_sec
+
+
+# BBG FULL maturity sectors ----------------------------------------------------
+
+write.csv(bbg_full_dataset, here('output', 'bbg_full_dataset.csv'))
+
+
+bbg_full_dataset_mat_sec <- read_excel(here('output', 'bbg_full_dataset.xlsx'),
+                                       sheet = 'bbg_full_dataset (values)')
+
+bbg_full_dataset_mat_sec <- bbg_full_dataset_mat_sec %>% 
+  select(Dates,ISIN,maturity_sector)
+
+bbg_full_dataset <- bbg_full_dataset %>% 
+  left_join(bbg_full_dataset_mat_sec,
+            by = c('Dates', 'ISIN'))
+
+
+# BBG BOE maturity sectors ------------------------------------------------
+
+bbg_dataset <- bbg_dataset %>% 
+  left_join(bbg_full_dataset_mat_sec,
+            by = c('Dates', 'ISIN'))
+
+
+
+
+# BBG controls ------------------------------------------------------------
+
+controls_raw <- read_xlsx(here('input','bbg_controls.xlsx'),
+                          sheet = "controls (values)",
+                          skip = 3) %>% 
+  select(1:15)
+
+controls <- controls_raw %>% 
+  set_names(c("Dates",
+              gsub("\\...*","",colnames(controls_raw[-1]))))
+
+
+controls <- controls %>% 
+  mutate(Dates = as.Date((Dates), origin = "1899-12-30", tz = "GMT"))
+
+
+# BBG OIS GILT dataset ----------------------------------------------------------
+
+ois_bench_raw <- read_excel(here('input', 'gilt_ois_data.xlsx'),
+                            sheet = 'ois (values)',
+                            skip = 2) %>% 
+  select(-1)
+
+ois_bench <- ois_bench_raw %>% 
+  mutate(Dates = as.Date(...2,origin = "1899-12-30", tz = "GMT"),
+         across(c(`1Y`:`50Y`), as.numeric)) %>% 
+  select(-1)
+
+gilt_bench_raw <- read_excel(here('input', 'gilt_ois_data.xlsx'),
+                            sheet = 'bench_gilts (values)',
+                            skip = 2) %>% 
+  select(-1)
+
+gilts_bench <- gilt_bench_raw %>% 
+  mutate(Dates = as.Date(...2,origin = "1899-12-30", tz = "GMT"),
+         across(c(`1Y`:`50Y`), as.numeric)) %>% 
+  select(-1)
+
+#remove OIS contracts that arent available for bench gilts
+ois_bench <- ois_bench %>% 
+  select(-c(`9Y`,`12Y`,`25Y`))
+
+#remove unavailable bench gilts
+gilts_bench <- gilts_bench %>% 
+  select(-c(`9Y`,`12Y`,`25Y`))
+
+
+
 # WRITE:  ------------------------------------------------------
 
 ###BOE dataset
@@ -817,7 +911,22 @@ saveRDS(boe_dataset, here('output','boe_dataset.RDS'))
 
 write.dta(boe_dataset, here('stata','boe_dataset.dta') )
 
-###BBG dataset
+write.csv(boe_dataset, here('output','boe_dataset.csv'))
+
+###BBG dataset w/BOE 
 write.dta(bbg_dataset, here('stata','bbg_dataset.dta'))
 
 saveRDS(bbg_dataset, here('output', 'bbg_dataset.RDS'))
+
+write.csv(bbg_dataset, here('output','bbg_dataset.csv'))
+
+
+###BBG ONLY dataset 
+write.dta(bbg_full_dataset, here('stata','bbg_full_dataset.dta'))
+
+saveRDS(bbg_full_dataset, here('output', 'bbg_full_dataset.RDS'))
+
+###Controls dataset
+write.dta(controls, here('stata','controls.dta'))
+
+saveRDS(controls, here('output', 'controls.RDS'))

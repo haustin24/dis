@@ -23,10 +23,13 @@ create.calendar("UKCal", holidays = holidayLONDON(2008:2021), weekdays = c("satu
 # READ:  ------------------------------------------------------------------
 
 # boe_market_freefloat_list <- readRDS(here('output', 'boe_freefloat_ownership_list.RDS'))
+
+#with info form boe operations e.g. freefloat and bid ask spreads
 bbg_dataset <- readRDS(here('output', 'bbg_dataset.RDS'))
 
 boe_dataset <- readRDS(here('output', 'boe_dataset.RDS'))
 
+#just bbg data 
 bbg_full_dataset <- readRDS(here('output','bbg_full_dataset.RDS'))
 
 boe_maturities <- read_xlsx(here('input','bbg_gilt_data.xlsx'), sheet = "boe_maturities")
@@ -192,92 +195,139 @@ plot_grid(p1,p2, ncol = 1)
 #Calculate spread 
 #BOSH
 
-boe_maturities <- boe_maturities %>% 
-  mutate(maturity = dmy(Maturity),
-         ISIN = str_sub(ISIN, end = -6L))
-
-#add back maturity dates of bonds for reference
-boe_dataset <- boe_dataset %>% 
-  left_join(boe_maturities %>% 
-              select(ISIN, maturity))
-
-
-#for start of loop (test) 
 lin_interp_list <- list()
 
-for (i in 1:nrow(boe_dataset)) {
-  df <- boe_dataset[i, ]
+for(i in 1:nrow(boe_dataset)){
+  test_boe <- boe_dataset[i, ]
   
-  #date of operation
-  #do we need to consider operation date + 1 ?
-  v0 <- df$operation_date
-  isin <- df$ISIN
+  test_ois <- ois_clean %>%
+    filter(date == test_boe$operation_date)
   
-  #find MID_YTM at date
-  #find MIT_YTM at less than or equal v0 (date), take final observation
-  ##ERROR: if yield data isn't available: Change to find closest 
-  
-  isin_ytm <- bbg_data %>%
-    filter(ISIN == isin &
-             Dates <= v0) %>%
-    tail(1) %>%
-    select(YLD_YTM_MID)
-  
-  #add ytm to dataframe
-  df <- df %>%
-    mutate(isin_ytm)
-  
-  #residual maturity at date of operation
-  #OR CLOSEST IF EXACT DATE NOT AVAILABLE
-  x <- df$res_mat
-  
-  #filter OIS date observations, sort and final date
-  v0a <- ois_clean %>% 
-    filter(date <= v0) %>% 
-    select(date) %>% 
-    unique() %>% 
-    pull() %>% 
-    sort() %>% 
-    last()
-  
-  #filter OIS data by nearest date obtained above ^
-  df2 <- ois_clean %>%
-    filter(date == v0a)
-  
+  #ois tenor - boe res mat
+  test_ois <- test_ois %>%
+    mutate(tenor_dif = ois_tenor - test_boe$res_mat)
+
   #linear interpolation
   # y = y1+[(x-x1)(y2-y1)]/(x2-x1)
   
-  #retrieve closest tenors to residual maturity
-  df2 <- df2 %>%
-    mutate(tenor_dif = ois_tenor - x)
-  
-  #lower bound
-  v1 <- df2 %>%
+  #nearest < tenor
+  ois_v1 <- test_ois %>%
     filter(tenor_dif < 0) %>%
     filter(tenor_dif == max(tenor_dif))
   
-  #upper bound
-  v2 <- df2 %>%
+  #nearest > tenor
+  ois_v2 <- test_ois %>%
     filter(tenor_dif >= 0) %>%
     filter(tenor_dif == min(tenor_dif))
   
-  #ois yields
-  y1 <- v1$ois_yield
-  y2 <- v2$ois_yield
+  if(nrow(ois_v1) == 0|
+     nrow(ois_v2) == 0){
+
+    lin_interp_list[[i]] <- test_boe %>%
+      mutate(lin_interp_ois_yield = NA)
+  }else{
+    
+  #tenors
+  x1 <- ois_v1$ois_tenor
+  x2 <- ois_v2$ois_tenor
   
-  #ois tenors
-  x1 <- v1$ois_tenor
-  x2 <- v2$ois_tenor
+  #ois yields
+  y1 <- ois_v1$ois_yield
+  y2 <- ois_v2$ois_yield
+  
+  #boe res mat
+  x <- test_boe$res_mat
   
   #linear interpolation
-  y <-  y1 + ((x - x1) * (y2 - y1)) / (x2 - x1)
+  y <- y1 + (x - x1) * ((y2 - y1) / (x2 - x1))
   
-  #add back to original df
-  df <- df %>%
-    mutate(ois_rate_interp = y)
+  lin_interp_list[[i]] <- test_boe %>%
+    mutate(lin_interp_ois_yield = y)
+  }
   
-  lin_interp_list[[i]] <- df
 }
+
+boe_lin_interp <- bind_rows(lin_interp_list)
+# 
+# #for start of loop (test) 
+# lin_interp_list <- list()
+# 
+# for (i in 1:nrow(boe_dataset)) {
+#   df <- boe_dataset[i, ]
+#   
+#   #date of operation
+#   #do we need to consider operation date + 1 ?
+#   v0 <- df$operation_date
+#   isin <- df$ISIN
+#   
+#   #find MID_YTM at date
+#   #find MIT_YTM at less than or equal v0 (date), take final observation
+#   ##ERROR: if yield data isn't available: Change to find closest 
+#   
+#   isin_ytm <- bbg_data %>%
+#     filter(ISIN == isin &
+#              Dates <= v0) %>%
+#     tail(1) %>%
+#     select(YLD_YTM_MID)
+#   
+#   #add ytm to dataframe
+#   df <- df %>%
+#     mutate(isin_ytm)
+#   
+#   #residual maturity at date of operation
+#   #OR CLOSEST IF EXACT DATE NOT AVAILABLE
+#   x <- df$res_mat
+#   
+#   #filter OIS date observations, sort and final date
+#   v0a <- ois_clean %>% 
+#     filter(date <= v0) %>% 
+#     select(date) %>% 
+#     unique() %>% 
+#     pull() %>% 
+#     sort() %>% 
+#     last()
+#   
+#   #filter OIS data by nearest date obtained above ^
+#   df2 <- ois_clean %>%
+#     filter(date == v0a)
+#   
+#   #linear interpolation
+#   # y = y1+[(x-x1)(y2-y1)]/(x2-x1)
+#   
+#   #retrieve closest tenors to residual maturity
+#   df2 <- df2 %>%
+#     mutate(tenor_dif = ois_tenor - x)
+#   
+#   #lower bound
+#   v1 <- df2 %>%
+#     filter(tenor_dif < 0) %>%
+#     filter(tenor_dif == max(tenor_dif))
+#   
+#   #upper bound
+#   v2 <- df2 %>%
+#     filter(tenor_dif >= 0) %>%
+#     filter(tenor_dif == min(tenor_dif))
+#   
+#   #ois yields
+#   y1 <- v1$ois_yield
+#   y2 <- v2$ois_yield
+#   
+#   #ois tenors
+#   x1 <- v1$ois_tenor
+#   x2 <- v2$ois_tenor
+#   
+#   #linear interpolation
+#   y <-  y1 + ((x - x1) * (y2 - y1)) / (x2 - x1)
+#   
+#   #add back to original df
+#   df <- df %>%
+#     mutate(ois_rate_interp = y)
+#   
+#   lin_interp_list[[i]] <- df
+# }
+# 
+# 
+
 
 
 #OLD: Single bond test (Bid Ask) -------------------------------------------------------
@@ -671,6 +721,7 @@ yield_curve_2day_change_function <- function(date){
   return(list(plot, yc_change))
 }
 
+
 yc_announcement_reaction_qe1 <- lapply(qe_announcements$announcement_date[1:4], yield_curve_2day_change_function)
 
 #qe1 reaction
@@ -697,140 +748,345 @@ qe5_grid <- ggarrange(yc_announcement_reaction_qe5[[1]][[1]],
           yc_announcement_reaction_qe5[[3]][[1]],
           common.legend = TRUE)
 
+#### DATA TABLE FOR YC Reaction
+
+#all yc reactions 2 days (t-1 COB t+1) JUST FOR DATA NOT PLOTS AS LIMS NOT CHANGED
+yc_announcement_reaction_v2 <- lapply(qe_announcements$announcement_date, yield_curve_2day_change_function)
+yc_announcement_reaction_data_list <- list()
+for(i in 1:11){
+  
+  yc_announcement_reaction_data_list[[i]] <- yc_announcement_reaction_v2[[i]][[2]] %>% 
+    mutate(announcement_date = qe_announcements$announcement_date[i],
+           announcement = qe_announcements$announcement[i])
+  
+}
+
+#dataframe of reaction data 
+yc_announcement_reaction_df <- bind_rows(yc_announcement_reaction_data_list)
+
+yc_react_wide <- yc_announcement_reaction_df %>% 
+  pivot_wider(names_from = name, values_from = value)
+
+yc_react_wide <- yc_react_wide %>% 
+  mutate(COB_change = COB - `t-1`,
+         `t+1_change` = `t+1` - `t-1`)
+
+yc_react_change <- yc_react_wide %>%
+  select(-c(`t-1`, "COB", `t+1`)) %>% 
+  pivot_longer(c(6,7))
+
+#Add in maturity sectors from bbg_full_dataset
+bbg_maturity_sectors <- bbg_full_dataset %>% 
+  select(Dates, ISIN, maturity_sector)
+
+yc_react_change <- yc_react_change %>% 
+  left_join(bbg_maturity_sectors,
+            by = c('Dates', 'ISIN'))
+
+#summary table of reaction to qe announcements 
+#mean, sd, IQR, max, min 
+#by announcement, COB change/t+1 change, maturity sector
+sum_yc_react_change<- yc_react_change %>% 
+  group_by(announcement, name, maturity_sector) %>% 
+  summarise(mean = mean(value),
+            sd = sd(value),
+            iqr = IQR(value),
+            max = max(value),
+            min = min(value))
+
+write.csv(sum_yc_react_change, here('output', 'yc_react_sum_table.csv'))
+# DESCRIPTIVE: YC BARCHART REACTION ---------------------------------------
+#RUN DESCRIPTIVE: YIELD CURVES FIRST 
+
+sum_yc_react_change$name[sum_yc_react_change$name==
+                                   "COB_change"]="Change at COB"
+
+sum_yc_react_change$name[sum_yc_react_change$name==
+                                   "t+1_change"]="Change at t+1"
+
+sum_yc_react_change$maturity_sector <- factor(sum_yc_react_change$maturity_sector,
+                                              levels = c("untargeted_short","short","medium",
+                                                         "long","untargeted_long"))
+
+ggplot(sum_yc_react_change) +
+  geom_col(aes(x = announcement, y = mean*100, fill = maturity_sector),
+           position = 'dodge') +
+  facet_wrap( ~ name, nrow = 2) +
+  theme_hc() +
+  scale_fill_manual(values = brewer.pal(5, "Set1"), name = "Maturity sector") +
+  labs(y = "Basis points",
+       x = "Announcement") +
+  theme(
+    legend.position = 'top',
+    legend.background = element_rect(
+      fill = "gray90",
+      size = .5,
+      linetype = "dotted"
+    ),
+    axis.text.x = element_text(vjust = 1),
+    axis.text.y = element_text(hjust = 1),
+    axis.line.x = element_line(colour = "black"),
+    axis.line.y = element_line(colour = "black")
+  )
+
 
 # DESCRIPTIVE: Liquidity reactions ----------------------------------------
 
 bbg_full_dataset <- bbg_full_dataset %>% 
   mutate(bid_ask_v1 = YLD_YTM_BID - YLD_YTM_ASK,
-         bid_ask_v2 = (YLD_YTM_BID - YLD_YTM_ASK)/YLD_YTM_MID,
+         #bid_ask_v2 = (YLD_YTM_BID - YLD_YTM_ASK)/YLD_YTM_MID,
          bid_ask_v3 = (PX_ASK - PX_BID)/PX_MID)
   
 
-bid_ask_levels_reaction_function <- function(date) {
-  
-  v1 <- bbg_full_dataset %>%
-    filter(Dates == as.Date(date) - days(1)) %>%
-    select(Dates, ISIN, res_mat,
-           bid_ask_v1, bid_ask_v2, bid_ask_v3)
-  
-  v1 <- v1 %>%
-    set_names(c(colnames(v1)[1:3],
-                paste0(colnames(v1[4:6]), "_t-1")))
-  
-  v2 <- bbg_full_dataset %>%
-    filter(Dates == as.Date(date)) %>%
-    select(ISIN, Dates,
-           bid_ask_v1, bid_ask_v2, bid_ask_v3)
-  
-  v2 <- v2 %>%
-    set_names(c(colnames(v2)[1],
-                "Date_COB",
-                paste0(colnames(v2[3:5]), "_COB")))
-  
-  v3 <- bbg_full_dataset %>%
-    filter(Dates == as.Date(date) + days(1)) %>%
-    select(ISIN, Dates,
-           bid_ask_v1, bid_ask_v2, bid_ask_v3)
-  
-  v3 <- v3 %>%
-    set_names(c(colnames(v3)[1],
-                "Date_t+1",
-                paste0(colnames(v3[3:5]), "_t+1")))
-  
-  z1 <- v1 %>%
-    left_join(v2,
-              by = c("ISIN")) %>%
-    left_join(v3,
-              by = c("ISIN")) %>% 
-    na.omit()
-  
-  y1 <- z1 %>%
-    select(Dates,
-           ISIN,
-           res_mat,
-           `bid_ask_v1_t-1`,
-           bid_ask_v1_COB,
-           `bid_ask_v1_t+1`) %>% 
-    pivot_longer(c(4:6))
-  
-  y1$name <- factor(y1$name,
-                    levels = c("bid_ask_v1_t-1",
-                               "bid_ask_v1_COB",
-                               "bid_ask_v1_t+1"))
-  
-  y2 <- z1 %>%
-    select(Dates,
-           ISIN,
-           res_mat,
-           `bid_ask_v2_t-1`,
-           bid_ask_v2_COB,
-           `bid_ask_v2_t+1`) %>% 
-    pivot_longer(c(4:6))
-  
-  y2$name <- factor(y2$name,
-                    levels = c("bid_ask_v2_t-1",
-                               "bid_ask_v2_COB",
-                               "bid_ask_v2_t+1"))
-  
-  y3 <- z1 %>%
-    select(Dates,
-           ISIN,
-           res_mat,
-           `bid_ask_v3_t-1`,
-           bid_ask_v3_COB,
-           `bid_ask_v3_t+1`) %>% 
-    pivot_longer(c(4:6))
-  
-  y3$name <- factor(y3$name,
-                    levels = c("bid_ask_v3_t-1",
-                               "bid_ask_v3_COB",
-                               "bid_ask_v3_t+1"))
-  
-  return(list(y1, y2, y3))
-  
-}
+# date <- qe_announcements$announcement_date[1]
+# 
+# bid_ask_levels_reaction_function <- function(date) {
+#   
+#   v1 <- bbg_full_dataset %>%
+#     filter(Dates == as.Date(date) - days(1)) %>%
+#     select(Dates, ISIN,
+#            bid_ask_v1, bid_ask_v2, bid_ask_v3)
+#   
+#   v1 <- v1 %>%
+#     set_names(c(colnames(v1)[1:2],
+#                 paste0(colnames(v1[3:5]), "_t-1")))
+#   
+#   v2 <- bbg_full_dataset %>%
+#     filter(Dates == as.Date(date)) %>%
+#     select(Dates, ISIN,
+#            bid_ask_v1, bid_ask_v2, bid_ask_v3)
+#   
+#   v2 <- v2 %>%
+#     set_names(c("Date_COB",
+#                 paste0(colnames(v2[2])),
+#                 paste0(colnames(v2[3:5]), "_COB")))
+#   
+#   v3 <- bbg_full_dataset %>%
+#     filter(Dates == as.Date(date) + days(1)) %>%
+#     select(Dates, ISIN, res_mat, maturity_sector,
+#            bid_ask_v1, bid_ask_v2, bid_ask_v3)
+#   
+#   v3 <- v3 %>%
+#     set_names(c("Date_t+1",
+#                 colnames(v3)[2:4],
+#                 paste0(colnames(v3[5:7]), "_t+1")))
+#   
+#   z1 <- v1 %>%
+#     left_join(v2,
+#               by = c("ISIN")) %>%
+#     left_join(v3,
+#               by = c("ISIN")) %>% 
+#     na.omit()
+#   
+#   y1 <- z1 %>%
+#     select(Dates,
+#            ISIN,
+#            res_mat,
+#            `bid_ask_v1_t-1`,
+#            bid_ask_v1_COB,
+#            `bid_ask_v1_t+1`) %>% 
+#     pivot_longer(c(4:6))
+#   
+#   y1$name <- factor(y1$name,
+#                     levels = c("bid_ask_v1_t-1",
+#                                "bid_ask_v1_COB",
+#                                "bid_ask_v1_t+1"))
+#   
+#   y2 <- z1 %>%
+#     select(Dates,
+#            ISIN,
+#            res_mat,
+#            `bid_ask_v2_t-1`,
+#            bid_ask_v2_COB,
+#            `bid_ask_v2_t+1`) %>% 
+#     pivot_longer(c(4:6))
+#   
+#   y2$name <- factor(y2$name,
+#                     levels = c("bid_ask_v2_t-1",
+#                                "bid_ask_v2_COB",
+#                                "bid_ask_v2_t+1"))
+#   
+#   y3 <- z1 %>%
+#     select(Dates,
+#            ISIN,
+#            res_mat,
+#            `bid_ask_v3_t-1`,
+#            bid_ask_v3_COB,
+#            `bid_ask_v3_t+1`) %>% 
+#     pivot_longer(c(4:6))
+#   
+#   y3$name <- factor(y3$name,
+#                     levels = c("bid_ask_v3_t-1",
+#                                "bid_ask_v3_COB",
+#                                "bid_ask_v3_t+1"))
+#   
+#   return(list(y1, y2, y3))
+#   
+# }
+# 
+# bid_ask_qe1a <- lapply(qe_announcements$announcement_date[1],
+#                       bid_ask_reaction_function)
+# 
+# ggplot(bid_ask_qe1a[[1]][[1]])+
+#   geom_col(aes(x = ISIN, y = value, fill = name),
+#            position = 'dodge', width = 0.5)
+# 
+# ggplot(bid_ask_qe1a[[1]][[2]])+
+#   geom_col(aes(x = ISIN, y = value, fill = name),
+#            position = 'dodge', width = 0.5)
+# 
+# bid_ask_change_reaction_function <- function(date) {
+#   
+#   v1 <- bbg_full_dataset %>%
+#     filter(Dates == as.Date(date) - days(1)) %>%
+#     select(Dates, ISIN, res_mat,
+#            bid_ask_v1, bid_ask_v2, bid_ask_v3)
+#   
+#   v1 <- v1 %>%
+#     set_names(c(colnames(v1)[1:3],
+#                 paste0(colnames(v1[4:6]), "_t-1")))
+#   
+#   v2 <- bbg_full_dataset %>%
+#     filter(Dates == as.Date(date)) %>%
+#     select(ISIN, Dates,
+#            bid_ask_v1, bid_ask_v2, bid_ask_v3)
+#   
+#   v2 <- v2 %>%
+#     set_names(c(colnames(v2)[1],
+#                 "Date_COB",
+#                 paste0(colnames(v2[3:5]), "_COB")))
+#   
+#   v3 <- bbg_full_dataset %>%
+#     filter(Dates == as.Date(date) + days(1)) %>%
+#     select(ISIN, Dates,
+#            bid_ask_v1, bid_ask_v2, bid_ask_v3)
+#   
+#   v3 <- v3 %>%
+#     set_names(c(colnames(v3)[1],
+#                 "Date_t+1",
+#                 paste0(colnames(v3[3:5]), "_t+1")))
+#   
+#   z1 <- v1 %>%
+#     left_join(v2,
+#               by = c("ISIN")) %>%
+#     left_join(v3,
+#               by = c("ISIN")) %>% 
+#     na.omit()
+#   
+#   y1 <- z1 %>%
+#     select(Dates,
+#            ISIN,
+#            res_mat,
+#            `bid_ask_v1_t-1`,
+#            bid_ask_v1_COB,
+#            `bid_ask_v1_t+1`) %>%
+#     mutate(bid_ask_v1_COB_chng =
+#              bid_ask_v1_COB - `bid_ask_v1_t-1`,
+#            `bid_ask_v1_t+1_chng` =
+#              `bid_ask_v1_t+1` - `bid_ask_v1_t-1`) %>% 
+#     select(Dates, ISIN, res_mat, 7,8) %>% 
+#     pivot_longer(c(4:5))
+#   
+#   y1$name <- factor(y1$name,
+#                     levels = c("bid_ask_v1_COB_chng",
+#                                "bid_ask_v1_t+1_chng"))
+#   
+#   y2 <- z1 %>%
+#     select(Dates,
+#            ISIN,
+#            res_mat,
+#            `bid_ask_v2_t-1`,
+#            bid_ask_v2_COB,
+#            `bid_ask_v2_t+1`) %>%
+#     mutate(bid_ask_v2_COB_chng =
+#              bid_ask_v2_COB - `bid_ask_v2_t-1`,
+#            `bid_ask_v2_t+1_chng` =
+#              `bid_ask_v2_t+1` - `bid_ask_v2_t-1`) %>% 
+#     select(Dates, ISIN, res_mat, 7,8) %>% 
+#     pivot_longer(c(4:5))
+#   
+#   y2$name <- factor(y2$name,
+#                     levels = c("bid_ask_v2_COB_chng",
+#                                "bid_ask_v2_t+1_chng"))
+#   
+#   y3 <- z1 %>%
+#     select(Dates,
+#            ISIN,
+#            res_mat,
+#            `bid_ask_v3_t-1`,
+#            bid_ask_v3_COB,
+#            `bid_ask_v3_t+1`) %>%
+#     mutate(bid_ask_v3_COB_chng =
+#              bid_ask_v3_COB - `bid_ask_v3_t-1`,
+#            `bid_ask_v3_t+1_chng` =
+#              `bid_ask_v3_t+1` - `bid_ask_v3_t-1`) %>% 
+#     select(Dates, ISIN, res_mat, 7,8) %>% 
+#     pivot_longer(c(4:5))
+#   
+#   y3$name <- factor(y3$name,
+#                     levels = c("bid_ask_v3_COB_chng",
+#                                "bid_ask_v3_t+1_chng"))
+#   
+#   
+#   return(list(y1, y2, y3))
+#   
+# }
+# 
+# bid_ask_qe1a_chng <- lapply(qe_announcements$announcement_date[1],
+#                             bid_ask_change_reaction_function)
+# 
+# ggplot(bid_ask_qe1a_chng[[1]][[1]])+
+#   geom_col(aes(x = ISIN, y = value, fill = name, shape = name),
+#            position = 'dodge')
+# 
+# ggplot(bid_ask_qe1a_chng[[1]][[2]])+
+#   geom_col(aes(x = ISIN, y = value, fill = name, shape = name),
+#            position = 'dodge')
+# 
+# ggplot(bid_ask_qe1a_chng[[1]][[3]])+
+#   geom_col(aes(x = ISIN, y = value*100, fill = name, shape = name),
+#            position = 'dodge')
+# 
+# 
 
-bid_ask_qe1a <- lapply(qe_announcements$announcement_date[1],
-                      bid_ask_reaction_function)
 
-ggplot(bid_ask_qe1a[[1]][[1]])+
-  geom_col(aes(x = ISIN, y = value, fill = name),
-           position = 'dodge', width = 0.5)
 
-ggplot(bid_ask_qe1a[[1]][[2]])+
-  geom_col(aes(x = ISIN, y = value, fill = name),
-           position = 'dodge', width = 0.5)
-
+#In use 
 bid_ask_change_reaction_function <- function(date) {
   
+  announcement_name <- qe_announcements %>% 
+    filter(announcement_date == date) %>% 
+    select(announcement) %>% 
+    pull()
+  
   v1 <- bbg_full_dataset %>%
     filter(Dates == as.Date(date) - days(1)) %>%
-    select(Dates, ISIN, res_mat,
+    select(Dates, ISIN,
            bid_ask_v1, bid_ask_v2, bid_ask_v3)
   
   v1 <- v1 %>%
-    set_names(c(colnames(v1)[1:3],
-                paste0(colnames(v1[4:6]), "_t-1")))
+    set_names(c(colnames(v1)[1:2],
+                paste0(colnames(v1[3:5]), "_t-1")))
   
   v2 <- bbg_full_dataset %>%
     filter(Dates == as.Date(date)) %>%
-    select(ISIN, Dates,
+    select(Dates, ISIN,
            bid_ask_v1, bid_ask_v2, bid_ask_v3)
   
   v2 <- v2 %>%
-    set_names(c(colnames(v2)[1],
-                "Date_COB",
+    set_names(c("Date_COB",
+                paste0(colnames(v2[2])),
                 paste0(colnames(v2[3:5]), "_COB")))
   
   v3 <- bbg_full_dataset %>%
     filter(Dates == as.Date(date) + days(1)) %>%
-    select(ISIN, Dates,
+    select(Dates, ISIN, res_mat, maturity_sector,
            bid_ask_v1, bid_ask_v2, bid_ask_v3)
   
   v3 <- v3 %>%
-    set_names(c(colnames(v3)[1],
-                "Date_t+1",
-                paste0(colnames(v3[3:5]), "_t+1")))
+    set_names(c("Date_t+1",
+                colnames(v3)[2:4],
+                paste0(colnames(v3[5:7]), "_t+1")))
   
   z1 <- v1 %>%
     left_join(v2,
@@ -839,79 +1095,183 @@ bid_ask_change_reaction_function <- function(date) {
               by = c("ISIN")) %>% 
     na.omit()
   
-  y1 <- z1 %>%
-    select(Dates,
-           ISIN,
-           res_mat,
-           `bid_ask_v1_t-1`,
-           bid_ask_v1_COB,
-           `bid_ask_v1_t+1`) %>%
-    mutate(bid_ask_v1_COB_chng =
-             bid_ask_v1_COB - `bid_ask_v1_t-1`,
-           `bid_ask_v1_t+1_chng` =
-             `bid_ask_v1_t+1` - `bid_ask_v1_t-1`) %>% 
-    select(Dates, ISIN, res_mat, 7,8) %>% 
-    pivot_longer(c(4:5))
+  z1 <- z1 %>% 
+    select(Dates,ISIN,res_mat,maturity_sector,
+           `bid_ask_v1_t-1`,bid_ask_v1_COB,`bid_ask_v1_t+1`,
+           `bid_ask_v2_t-1`,bid_ask_v2_COB,`bid_ask_v2_t+1`,
+           `bid_ask_v3_t-1`,bid_ask_v3_COB,`bid_ask_v3_t+1`) %>% 
+    mutate(
+      bid_ask_v1_COB_change = bid_ask_v1_COB - `bid_ask_v1_t-1`,
+      `bid_ask_v1_t+1_change` = `bid_ask_v1_t+1` - `bid_ask_v1_t-1`,
+      bid_ask_v2_COB_change = bid_ask_v2_COB - `bid_ask_v2_t-1`,
+      `bid_ask_v2_t+1_change` = `bid_ask_v2_t+1` - `bid_ask_v2_t-1`,
+      bid_ask_v3_COB_change = bid_ask_v3_COB - `bid_ask_v3_t-1`,
+      `bid_ask_v3_t+1_change` = `bid_ask_v3_t+1` - `bid_ask_v3_t-1`
+    )
   
-  y1$name <- factor(y1$name,
-                    levels = c("bid_ask_v1_COB_chng",
-                               "bid_ask_v1_t+1_chng"))
+  y1 <- z1 %>% 
+    select(Dates, ISIN, res_mat, maturity_sector,
+           bid_ask_v1_COB_change,`bid_ask_v1_t+1_change`,
+           bid_ask_v2_COB_change,`bid_ask_v2_t+1_change`,
+           bid_ask_v3_COB_change, `bid_ask_v3_t+1_change`) %>% 
+    mutate(announcement_date = date,
+           announcement = announcement_name)
   
-  y2 <- z1 %>%
-    select(Dates,
-           ISIN,
-           res_mat,
-           `bid_ask_v2_t-1`,
-           bid_ask_v2_COB,
-           `bid_ask_v2_t+1`) %>%
-    mutate(bid_ask_v2_COB_chng =
-             bid_ask_v2_COB - `bid_ask_v2_t-1`,
-           `bid_ask_v2_t+1_chng` =
-             `bid_ask_v2_t+1` - `bid_ask_v2_t-1`) %>% 
-    select(Dates, ISIN, res_mat, 7,8) %>% 
-    pivot_longer(c(4:5))
-  
-  y2$name <- factor(y2$name,
-                    levels = c("bid_ask_v2_COB_chng",
-                               "bid_ask_v2_t+1_chng"))
-  
-  y3 <- z1 %>%
-    select(Dates,
-           ISIN,
-           res_mat,
-           `bid_ask_v3_t-1`,
-           bid_ask_v3_COB,
-           `bid_ask_v3_t+1`) %>%
-    mutate(bid_ask_v3_COB_chng =
-             bid_ask_v3_COB - `bid_ask_v3_t-1`,
-           `bid_ask_v3_t+1_chng` =
-             `bid_ask_v3_t+1` - `bid_ask_v3_t-1`) %>% 
-    select(Dates, ISIN, res_mat, 7,8) %>% 
-    pivot_longer(c(4:5))
-  
-  y3$name <- factor(y3$name,
-                    levels = c("bid_ask_v3_COB_chng",
-                               "bid_ask_v3_t+1_chng"))
-  
-  
-  return(list(y1, y2, y3))
+  y1
   
 }
 
-bid_ask_qe1a_chng <- lapply(qe_announcements$announcement_date[1],
-                       bid_ask_change_reaction_function)
+bid_ask_reaction <- bind_rows(lapply(qe_announcements$announcement_date, bid_ask_change_reaction_function))
 
-ggplot(bid_ask_qe1a_chng[[1]][[1]])+
-  geom_col(aes(x = ISIN, y = value, fill = name, shape = name),
-           position = 'dodge')
 
-ggplot(bid_ask_qe1a_chng[[1]][[2]])+
-  geom_col(aes(x = ISIN, y = value, fill = name, shape = name),
-           position = 'dodge')
+sum_bid_ask_react_change <- bid_ask_reaction %>%
+  pivot_longer(c(bid_ask_v1_COB_change:`bid_ask_v3_t+1_change`)) %>% 
+  group_by(announcement, name, maturity_sector) %>% 
+  summarise(mean = mean(value),
+            sd = sd(value),
+            iqr = IQR(value),
+            max = max(value),
+            min = min(value))
 
-ggplot(bid_ask_qe1a_chng[[1]][[3]])+
-  geom_col(aes(x = ISIN, y = value*100, fill = name, shape = name),
-           position = 'dodge')
+
+ggplot(sum_bid_ask_react_change)+
+  geom_col(aes(x = announcement, y = mean, fill = maturity_sector), position = 'dodge')+
+  facet_grid(~name)
+
+#v3 bid-asks (Exact JGB study with prices)
+sum_bid_ask_react_change_v3 <- sum_bid_ask_react_change %>% 
+  filter(name == "bid_ask_v3_COB_change"|
+           name == "bid_ask_v3_t+1_change")
+
+sum_bid_ask_react_change_v3$maturity_sector <- factor(sum_bid_ask_react_change_v3$maturity_sector,
+                                           levels = c("untargeted_short","short","medium",
+                                                      "long", "untargeted_long"))
+sum_bid_ask_react_change_v3$name[sum_bid_ask_react_change_v3$name==
+                                   "bid_ask_v3_COB_change"]="Change at COB"
+
+sum_bid_ask_react_change_v3$name[sum_bid_ask_react_change_v3$name==
+                                   "bid_ask_v3_t+1_change"]="Change at t+1"
+
+ggplot(sum_bid_ask_react_change_v3) +
+  geom_col(aes(x = announcement, y = mean * 100, fill = maturity_sector),
+           position = 'dodge') +
+  facet_wrap( ~ name, nrow = 2) +
+  theme_hc() +
+  scale_fill_manual(values = brewer.pal(5, "Set1"), name = "Maturity sector") +
+  labs(y = "Basis points",
+       x = "Announcement",
+       caption = "V3") +
+  theme(
+    legend.position = 'top',
+    legend.background = element_rect(
+      fill = "gray90",
+      size = .5,
+      linetype = "dotted"
+    ),
+    axis.text.x = element_text(vjust = 1),
+    axis.text.y = element_text(hjust = 1),
+    axis.line.x = element_line(colour = "black"),
+    axis.line.y = element_line(colour = "black")
+  )
+  
+#v1 classic bid ask spread
+sum_bid_ask_react_change_v1 <- sum_bid_ask_react_change %>% 
+  filter(name == "bid_ask_v1_COB_change"|
+           name == "bid_ask_v1_t+1_change")
+
+sum_bid_ask_react_change_v1$maturity_sector <- factor(sum_bid_ask_react_change_v1$maturity_sector,
+                                                      levels = c("untargeted_short","short","medium",
+                                                                 "long", "untargeted_long"))
+sum_bid_ask_react_change_v1$name[sum_bid_ask_react_change_v1$name==
+                                   "bid_ask_v1_COB_change"]="Change at COB"
+
+sum_bid_ask_react_change_v1$name[sum_bid_ask_react_change_v1$name==
+                                   "bid_ask_v1_t+1_change"]="Change at t+1"
+
+ggplot(sum_bid_ask_react_change_v1) +
+  geom_col(aes(x = announcement, y = mean * 100, fill = maturity_sector),
+           position = 'dodge') +
+  facet_wrap(~ name, nrow = 2) +
+  theme_hc() +
+  scale_fill_manual(values = brewer.pal(5, "Set1"), name = "Maturity sector") +
+  labs(y = "Basis points",
+       x = "Announcement",
+       caption = "v1") +
+  theme(
+    legend.position = 'top',
+    legend.background = element_rect(
+      fill = "gray90",
+      size = .5,
+      linetype = "dotted"
+    ),
+    axis.text.x = element_text(vjust = 1),
+    axis.text.y = element_text(hjust = 1),
+    axis.line.x = element_line(colour = "black"),
+    axis.line.y = element_line(colour = "black")
+  )
+
+
+write.csv(sum_bid_ask_react_change, here('output','bid_ask_react_sum_table.csv'))
+
+
+
+
+# DESCRIPTIVE: Liquidity robust check -------------------------------------
+#check how bid ask spreads change over the week of an announcement
+
+date <- qe_announcements$announcement_date[2]
+
+bis_days <- bbg_full_dataset %>% 
+  select(Dates) %>% 
+  unique() %>% 
+  arrange()
+
+#t-1 announcement and 1 business week days 
+week_window <- bis_days %>% 
+  filter(Dates >= date - days(1)&
+           Dates < date + days(7))
+
+#add reference for day since announcement
+week_window <- week_window %>% 
+  mutate(since_announcement =
+           c("t_minus_1", "COB",
+             paste0("t_plus_",seq(1,4,1))))
+
+#filter dataset to dates
+v1 <- bbg_full_dataset %>% 
+  filter(Dates %in% week_window$Dates) %>% 
+  select(Dates, ISIN,
+         maturity_sector, bid_ask_v1,bid_ask_v3) %>% 
+  left_join(week_window)
+
+
+#daily change
+v1 <- v1 %>%
+  group_by(ISIN) %>%
+  mutate(v1_daily_change = c(NA,diff(bid_ask_v1)),
+         v3_daily_change = c(NA,diff(bid_ask_v3)))
+
+
+#group by maturity sector
+v1_sum <- v1 %>% 
+  group_by(maturity_sector, since_announcement) %>%
+  na.omit() %>% 
+  summarise(mean_v1 = mean(v1_daily_change),
+            mean_v3 = mean(v3_daily_change)) %>% 
+  pivot_longer(c(3,4))
+
+ggplot(v1_sum)+
+  geom_col(aes(x = since_announcement, y = value, fill = maturity_sector),
+           position = 'dodge')+
+  facet_wrap(~name)
+
+
+
+
+# DESCRIPTIVE: GILT-OIS Spreads -------------------------------------------
+
+
+
 
 
 # DESCRIPTIVE: HR Boxplots by programme ---------------------------------------------------
@@ -964,6 +1324,7 @@ plot_hr_boxplot <- ggplot(hr_histo_data)+
   labs(x = "Programme",
        y = "Holding ratio")+
   scale_fill_manual(values=brewer.pal(5,"Dark2"), name="Programme")+
+  scale_y_continuous(labels = scales::percent, breaks = seq(0,0.7,0.1))+
   theme(legend.position = 'none',
         axis.text.x = element_text(vjust = 1),
         axis.text.y = element_text(hjust = 1),
@@ -971,6 +1332,39 @@ plot_hr_boxplot <- ggplot(hr_histo_data)+
         axis.line.y = element_line(colour = "black"),
         strip.text.x = element_text(
           size = 10, face = "bold"))
+
+
+# DESCRIPTIVE: Holding ratio by maturity split -------------------------------------------
+
+hr_mat_sec <- boe_dataset %>% 
+  group_by(prog, maturity_sector) %>% 
+  summarise(mean = mean(holding_ratio))
+
+hr_mat_sec$maturity_sector <- factor(hr_mat_sec$maturity_sector,
+                                     levels = c("short","medium","long"))
+
+  ggplot(hr_mat_sec)+
+  geom_col(aes(x = prog, y = mean, fill = maturity_sector), position = 'dodge')+
+  theme_hc()+
+  labs(x = "Programme",
+       y = "Holding ratio")+
+  scale_fill_manual(values=brewer.pal(4,"Set1")[2:4], name="Maturity sector")+
+  scale_y_continuous(labels = scales::percent, breaks = seq(0,0.4,0.1))+
+  theme(
+    legend.position = 'top',
+    legend.background = element_rect(
+      fill = "gray90",
+      size = .5,
+      linetype = "dotted"
+    ),
+    axis.text.x = element_text(vjust = 1),
+    axis.text.y = element_text(hjust = 1),
+    axis.line.x = element_line(colour = "black"),
+    axis.line.y = element_line(colour = "black")
+  )
+
+
+
 
 
 
