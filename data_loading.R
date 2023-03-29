@@ -901,6 +901,33 @@ ois_bench <- ois_bench %>%
 gilts_bench <- gilts_bench %>% 
   select(-c(`9Y`,`12Y`,`25Y`))
 
+gilts_bench_long <- gilts_bench %>% 
+  pivot_longer(c(-15))
+
+bench_isins_raw <- read_excel(here('input','gilt_ois_data.xlsx'),
+                          sheet = 'bench_isins_daily')
+
+
+
+bench_isins_long <- list()
+for(i in 1:nrow(bench_isins_raw)){
+
+  test <- bench_isins_raw[i,] %>% 
+  select(ISIN, Tenor, From, To)
+
+  bench_isins_long[[i]] <- tibble(Dates = seq(test$From, test$To, 'days'),
+       ISIN = test$ISIN,
+       Tenor = test$Tenor)
+}
+
+#Big list of dates with each tenor and isin
+bench_isins <- bind_rows(bench_isins_long)
+
+#df with timeseries of benchmark gilts with ISINs
+gilts_bench_named <- gilts_bench_long %>% 
+  set_names("Dates","Tenor", "value") %>% 
+  left_join(bench_isins,
+            by = c("Dates", "Tenor"))
 
 
 # WRITE:  ------------------------------------------------------
