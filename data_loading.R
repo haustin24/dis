@@ -929,7 +929,64 @@ gilts_bench_named <- gilts_bench_long %>%
   left_join(bench_isins,
             by = c("Dates", "Tenor"))
 
+#Rename OIS df
+ois_bench_long <- ois_bench %>% 
+  pivot_longer(c(-Dates)) %>% 
+  set_names("Dates","Tenor","OIS_YLD")
 
+#Rename gilt df
+gilts_bench_named <- gilts_bench_named %>% 
+  set_names("Dates","Tenor","GILT_YLD",
+            "ISIN")
+
+#Join benchmark gilts and OIS by tenors
+ois_gilt_named <- ois_bench_long %>% 
+  left_join(gilts_bench_named,
+            by = c("Dates","Tenor"))
+
+#Add Holding-ratio from bbg_dataset 
+ois_gilt_hr <- ois_gilt_named %>% 
+  left_join(bbg_dataset %>% 
+              select(Dates, ISIN,
+                     percent_of_freefloat),
+            by = c("Dates","ISIN"))
+
+
+#add res mats from full bbg dataset
+# ois_gilt_hr <- ois_gilt_hr %>% 
+#   left_join(bbg_full_dataset %>% 
+#               select(Dates, ISIN, res_mat),
+#             by = c('Dates','ISIN'))
+
+#new way of adding maturity sector
+#create df of timeseries of 
+#??? maybe not necessary
+
+
+
+
+##applied offset mat_secs in excel
+ois_gilt_hr <- read_excel(here('input','ois_gilt_hr.xlsx'),
+                          sheet = 'ois_gilt_hr (values)')
+
+ois_gilt_hr <- ois_gilt_hr %>% 
+  mutate(Dates = as.Date(Dates, origin = "1899-12-30", tz = "GMT"),
+         OIS_YLD = as.numeric(OIS_YLD),
+         GILT_YLD = as.numeric(GILT_YLD),
+         percent_of_freefloat = as.numeric(percent_of_freefloat),
+         gilt_ois_spread = as.numeric(gilt_ois_spread)) %>% 
+  select(-c('sec_def','tenor'))
+
+
+
+saveRDS(ois_gilt_hr, here('output','ois_gilt_hr.RDS'))
+
+# ois_gilt_hr <- ois_gilt_hr %>% 
+#   mutate(Dates = as.Date(Dates, origin = "1899-12-30", tz = "GMT"))
+
+write.dta(ois_gilt_hr, here('stata','ois_gilt_hr.dta'))
+
+write.csv(ois_gilt_hr, here('output','ois_gilt_hr.csv'))
 # WRITE:  ------------------------------------------------------
 
 ###BOE dataset

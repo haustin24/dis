@@ -49,6 +49,8 @@ qe_prog <- read_xlsx(here('input', 'qe_prog_data.xlsx'),
 qe_announcements <- read_excel(here('input', 'qe_prog_data.xlsx'),
                                sheet = 'announcements')
 
+ois_gilt_hr <- readRDS(here('output','ois_gilt_hr.RDS'))
+
 # OLD: DMO merge ----------------------------------------------------------------
 
 
@@ -1269,8 +1271,103 @@ ggplot(v1_sum)+
 
 
 # DESCRIPTIVE: GILT-OIS Spreads -------------------------------------------
+gilt_ois_change_reaction_function <- function(date) {
+  
+  announcement_name <- qe_announcements %>% 
+    filter(announcement_date == date) %>% 
+    select(announcement) %>% 
+    pull()
+  
+  v1 <- ois_gilt_hr %>%
+    filter(Dates == as.Date(date) - days(1)) %>%
+    select(Dates, ISIN, gilt_ois_spread)
+  
+  v1 <- v1 %>%
+    set_names(c(colnames(v1)[1:2],
+                paste0(colnames(v1[3]), "_t-1")))
+  
+  v2 <- ois_gilt_hr %>%
+    filter(Dates == as.Date(date)) %>%
+    select(Dates, ISIN, gilt_ois_spread)
+  
+  v2 <- v2 %>%
+    set_names(c("Date_COB",
+                paste0(colnames(v2[2])),
+                paste0(colnames(v2[3]), "_COB")))
+  
+  v3 <- ois_gilt_hr %>%
+    filter(Dates == as.Date(date) + days(1)) %>%
+    select(Dates, ISIN, Tenor,
+           mat_sec, gilt_ois_spread)
+  
+  v3 <- v3 %>%
+    set_names(c("Date_t+1",
+                colnames(v3)[2:4],
+                paste0(colnames(v3[5]), "_t+1")))
+  
+  z1 <- v1 %>%
+    left_join(v2,
+              by = c("ISIN")) %>%
+    left_join(v3,
+              by = c("ISIN")) %>% 
+    na.omit()
+  
+  z1 <- z1 %>% 
+    select(Dates,ISIN,Tenor,mat_sec,
+           `gilt_ois_spread_t-1`, gilt_ois_spread_COB, `gilt_ois_spread_t+1`) %>% 
+    mutate(
+      gilt_ois_spread_COB_change = gilt_ois_spread_COB - `gilt_ois_spread_t-1`,
+      `gilt_ois_spread_t+1_change` = `gilt_ois_spread_t+1` - `gilt_ois_spread_t-1`)
+  
+  y1 <- z1 %>% 
+    select(Dates, ISIN, Tenor, mat_sec,
+           gilt_ois_spread_COB_change,`gilt_ois_spread_t+1_change`)%>% 
+    mutate(announcement_date = date,
+           announcement = announcement_name)
+  
+  y1
+  
+}
+
+gilt_ois_reaction <- bind_rows(lapply(qe_announcements$announcement_date, gilt_ois_change_reaction_function))
+
+sum_gilt_ois_react_change <- gilt_ois_reaction %>%
+  pivot_longer(c(gilt_ois_spread_COB_change:`gilt_ois_spread_t+1_change`)) %>% 
+  group_by(announcement, name, mat_sec) %>% 
+  summarise(mean = mean(value),
+            sd = sd(value),
+            iqr = IQR(value),
+            max = max(value),
+            min = min(value))
+
+sum_gilt_ois_react_change$mat_sec <- factor(sum_gilt_ois_react_change$mat_sec,
+                                              levels = c("untargeted_short","short","medium",
+                                                         "long","untargeted_long"))
 
 
+ggplot(sum_gilt_ois_react_change) +
+  geom_col(aes(x = announcement, y = mean * 100, fill = mat_sec),
+           position = 'dodge') +
+  facet_wrap( ~ name, nrow = 2) +
+  theme_hc() +
+  scale_fill_manual(values = brewer.pal(5, "Set1"), name = "Maturity sector") +
+  labs(y = "Basis points",
+       x = "Announcement",
+       caption = "V3") +
+  theme(
+    legend.position = 'top',
+    legend.background = element_rect(
+      fill = "gray90",
+      size = .5,
+      linetype = "dotted"
+    ),
+    axis.text.x = element_text(vjust = 1),
+    axis.text.y = element_text(hjust = 1),
+    axis.line.x = element_line(colour = "black"),
+    axis.line.y = element_line(colour = "black")
+  )
+
+write.csv(sum_gilt_ois_react_change, here('output','gilt_ois_react_sum_table.csv'))
 
 
 
